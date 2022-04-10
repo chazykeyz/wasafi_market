@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class TextTile extends StatelessWidget {
-  const TextTile({Key? key, required this.title}) : super(key: key);
+  const TextTile({Key? key, required this.title, required this.more})
+      : super(key: key);
   final String title;
+  final Widget more;
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +24,26 @@ class TextTile extends StatelessWidget {
                 text: title,
                 size: 18,
               )),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Regular(
-                text: "See More ",
-                color: Colors.blue,
-                size: 15,
-              ),
-              Icon(
-                CupertinoIcons.chevron_right,
-                color: Colors.blue,
-                size: 20,
-              )
-            ],
+          GestureDetector(
+            onTap: () {
+              Get.to(() => more);
+              print('$more()');
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Regular(
+                  text: "See More ",
+                  color: Colors.blue,
+                  size: 15,
+                ),
+                Icon(
+                  CupertinoIcons.chevron_right,
+                  color: Colors.blue,
+                  size: 20,
+                )
+              ],
+            ),
           )
         ],
       ),

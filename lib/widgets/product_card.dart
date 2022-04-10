@@ -22,33 +22,34 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                height: 150,
+                child: Stack(children: [
+                  ClipRRect(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://images.pexels.com/photos/8386657/pexels-photo-8386657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"),
+                              fit: BoxFit.cover)),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                        child: Container(
+                          color: const Color.fromARGB(47, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Image.network(
+                      "https://images.pexels.com/photos/8386657/pexels-photo-8386657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ]),
               ),
-              child: Stack(children: [
-                Positioned(
-                    child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    width: double.infinity,
-                    height: 150,
-                    decoration: const BoxDecoration(
-                        color: Colors.red,
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://images.pexels.com/photos/7679682/pexels-photo-7679682.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"),
-                            fit: BoxFit.cover)),
-                  ),
-                )),
-                Center(
-                  child: Image.network(
-                    "https://images.pexels.com/photos/7679682/pexels-photo-7679682.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                    fit: BoxFit.fill,
-                  ),
-                ),
-              ]),
             ),
             Container(
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),

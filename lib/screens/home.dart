@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wasafi_market/screens/category.dart';
 import 'package:wasafi_market/widgets/home_slider.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_list.dart';
@@ -78,6 +79,7 @@ class Home extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const TextTile(
               title: "Featured",
+              more: CategoryDetail(),
             ),
             SizedBox(
               height: 230,

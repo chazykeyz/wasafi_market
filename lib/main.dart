@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:wasafi_market/screens/home.dart';
-import 'package:wasafi_market/widgets/stories.dart';
+import 'package:wasafi_market/screens/explore.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +54,7 @@ class _ParentState extends State<Parent> {
 //  the screen children
   final List _screenChildren = const [
     Home(),
-    Story(),
+    Explore(),
     Text("page 3"),
     Text("page 4"),
     Text("page 5"),
@@ -91,6 +91,7 @@ class _ParentState extends State<Parent> {
 //        explore navigation
               ,
               BottomNavigationBarItem(
+                backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.location_north),
                 activeIcon: Icon(CupertinoIcons.location_north_fill),
                 label: "Explore",

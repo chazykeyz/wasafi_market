@@ -7,25 +7,23 @@ class HomeSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      height: 260,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Swiper(
         autoplay: true,
-        autoplayDelay: 2000,
+        autoplayDelay: 4000,
         loop: true,
-        itemWidth: MediaQuery.of(context).size.width,
         itemBuilder: (BuildContext context, int index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
-              "https://images.unsplash.com/photo-1649291550638-0dec4995db3a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2232&q=80",
-              fit: BoxFit.fill,
+              "https://images.pexels.com/photos/8769188/pexels-photo-8769188.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              fit: BoxFit.cover,
             ),
           );
         },
         itemCount: 3,
-        itemHeight: 250.0,
-        layout: SwiperLayout.TINDER,
       ),
     );
   }

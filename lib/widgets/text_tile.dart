@@ -27,7 +27,6 @@ class TextTile extends StatelessWidget {
           GestureDetector(
             onTap: () {
               Get.to(() => more);
-              print('$more()');
             },
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,

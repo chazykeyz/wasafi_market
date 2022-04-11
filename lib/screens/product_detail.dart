@@ -67,45 +67,50 @@ class _ProductDetailState extends State<ProductDetail> {
           floating: true,
           expandedHeight: MediaQuery.of(context).size.width + 20,
           collapsedHeight: 60,
-          flexibleSpace: Swiper(
-            autoplay: true,
-            autoplayDelay: 2000,
-            loop: true,
-            itemWidth: MediaQuery.of(context).size.width,
-            itemBuilder: (BuildContext context, int index) {
-              return Stack(children: [
-                // the blurred image
-                ClipRRect(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"),
-                            fit: BoxFit.cover)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                      child: Container(),
+          flexibleSpace: FlexibleSpaceBar(
+            background: Swiper(
+              autoplay: true,
+              autoplayDelay: 2000,
+              loop: true,
+              itemWidth: MediaQuery.of(context).size.width,
+              itemBuilder: (BuildContext context, int index) {
+                return Stack(children: [
+                  // the blurred image
+                  ClipRRect(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"),
+                              fit: BoxFit.cover)),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                        child: Container(),
+                      ),
                     ),
                   ),
-                ),
-                // the visible image
-                Center(
-                  child: Image.network(
-                    "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-                    fit: BoxFit.fill,
+                  // the visible image
+                  Center(
+                    child: Image.network(
+                      "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                ),
-                // gradient colors
-                Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [Colors.black, Colors.black.withOpacity(0)])),
-                )
-              ]);
-            },
-            itemCount: 3,
+                  // gradient colors
+                  Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                          Colors.black,
+                          Colors.black.withOpacity(0)
+                        ])),
+                  )
+                ]);
+              },
+              itemCount: 3,
+            ),
           ),
         ),
         SliverToBoxAdapter(
@@ -114,7 +119,32 @@ class _ProductDetailState extends State<ProductDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Bold(text: "Maniac Red Boys", size: 22),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Bold(text: "Maniac Red Boys", size: 22),
+                    GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Center(
+                          child: Container(
+                              margin: const EdgeInsets.all(5),
+                              width: 47,
+                              height: 47,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(28),
+                                  color: Colors.white24),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(28),
+                                child: const Icon(
+                                  CupertinoIcons.share,
+                                  color: Colors.white,
+                                ),
+                              )),
+                        )),
+                  ],
+                ),
                 const Padding(
                   padding: EdgeInsets.only(top: 8.0),
                   child: Regular(

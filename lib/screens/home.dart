@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasafi_market/screens/category.dart';
+import 'package:wasafi_market/widgets/category_card.dart';
 import 'package:wasafi_market/widgets/home_slider.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_list.dart';
@@ -17,13 +18,11 @@ class Home extends StatelessWidget {
       slivers: [
         SliverAppBar(
           backgroundColor: Colors.black,
-          leading: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Image(
-                color: Color.fromARGB(236, 255, 255, 255),
-                image: NetworkImage(
-                    "https://wasafimediagroup.co.tz/static/wasafiIcon.png")),
-          ),
+          pinned: true,
+          automaticallyImplyLeading: false,
+          title: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Bold(text: "Wasafi", size: 20)),
           bottom: (PreferredSize(
               child: Container(
                 color: const Color.fromARGB(14, 255, 255, 255),
@@ -39,6 +38,26 @@ class Home extends StatelessWidget {
                   size: 26,
                 ))
           ],
+        ),
+        SliverToBoxAdapter(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Bold(
+                  text: "Stories",
+                  size: 18,
+                )),
+            SizedBox(
+              height: 170,
+              child: ListView.builder(
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, index) {
+                    return const Status();
+                  }),
+            ),
+          ]),
         ),
         SliverToBoxAdapter(
           child: Column(
@@ -57,21 +76,37 @@ class Home extends StatelessWidget {
         SliverToBoxAdapter(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Center(
+              child: Container(
+                height: .5,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                width: MediaQuery.of(context).size.width - 100,
+                color: Colors.white24,
+              ),
+            ),
             const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 child: Bold(
-                  text: "Stories",
+                  text: "Categories",
                   size: 18,
                 )),
             SizedBox(
-              height: 200,
+              height: 130,
               child: ListView.builder(
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const Status();
+                    return const CatergoryCard();
                   }),
             ),
+            Center(
+              child: Container(
+                height: .5,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                width: MediaQuery.of(context).size.width - 100,
+                color: Colors.white24,
+              ),
+            )
           ]),
         ),
         SliverToBoxAdapter(

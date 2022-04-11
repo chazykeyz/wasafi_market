@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
+import 'package:wasafi_market/widgets/text/regular.dart';
 
 class CategoryDetail extends StatelessWidget {
   const CategoryDetail({Key? key}) : super(key: key);
@@ -14,59 +15,58 @@ class CategoryDetail extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-                pinned: true,
-                elevation: 0,
-                expandedHeight: 200,
-                collapsedHeight: 70,
-                leading: GestureDetector(
+              backgroundColor: Colors.black,
+              pinned: true,
+              elevation: 0,
+              collapsedHeight: 70,
+              automaticallyImplyLeading: false,
+              title: Row(children: [
+                GestureDetector(
                     onTap: () {
                       Get.back();
                     },
                     child: Center(
                       child: Container(
                           margin: const EdgeInsets.all(5),
-                          width: 47,
-                          height: 47,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(28),
-                              color: Colors.white24),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(28),
-                            child: const Icon(CupertinoIcons.chevron_back),
+                          child: const Icon(
+                            CupertinoIcons.chevron_back,
+                            size: 30,
                           )),
                     )),
-                flexibleSpace: Stack(children: [
-                  // the visible image
-                  Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"),
-                            fit: BoxFit.cover)),
-                  ),
-                  // gradient colors
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                          Colors.black,
-                          Colors.black.withOpacity(.3)
-                        ])),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Bold(text: "Women Clothes", size: 20),
-                          )
-                        ]),
-                  ),
-                ])),
+                const Bold(
+                  text: "Women Clothes",
+                  size: 18,
+                ),
+              ]),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                height: 35,
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: ListView.builder(
+                    itemCount: 10,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                            color: Colors.blueAccent.withOpacity(.2),
+                            border: Border.all(
+                                width: 1,
+                                color: Colors.blueAccent.withOpacity(.3)),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: const Center(
+                          child: Regular(
+                            color: Colors.white,
+                            text: "Shoes",
+                            size: 16,
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            ),
             SliverGrid(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

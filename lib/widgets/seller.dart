@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/widgets/stories.dart';
@@ -47,13 +48,23 @@ class Seller extends StatelessWidget {
                         )),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 4.0, bottom: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4.0, bottom: 8),
                   child: Center(
-                    child: Bold(
-                      text: "chazy keyz",
-                      size: 14,
-                    ),
+                    child: Row(children: const [
+                      Bold(
+                        text: "chazy keyz",
+                        size: 14,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child: Icon(
+                          CupertinoIcons.checkmark_seal_fill,
+                          size: 16,
+                          color: Colors.blueAccent,
+                        ),
+                      )
+                    ]),
                   ),
                 ),
                 Container(

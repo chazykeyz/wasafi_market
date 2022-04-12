@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:wasafi_market/screens/home.dart';
-import 'package:wasafi_market/screens/explore.dart';
+import 'package:wasafi_market/screens/navigation_screens/favorite.dart';
+import 'package:wasafi_market/screens/navigation_screens/home.dart';
+import 'package:wasafi_market/screens/navigation_screens/explore.dart';
+import 'package:wasafi_market/screens/navigation_screens/shops.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,8 +57,8 @@ class _ParentState extends State<Parent> {
   final List _screenChildren = const [
     Home(),
     Explore(),
-    Text("page 3"),
-    Text("page 4"),
+    Shops(),
+    Favorite(),
     Text("page 5"),
   ];
 
@@ -99,10 +101,12 @@ class _ParentState extends State<Parent> {
               //  shop navigation
               ,
               BottomNavigationBarItem(
+                backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.bag),
                 label: "Shops",
               ),
               BottomNavigationBarItem(
+                backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.hand_thumbsup),
                 activeIcon: Icon(CupertinoIcons.hand_thumbsup_fill),
                 label: "Favorite",

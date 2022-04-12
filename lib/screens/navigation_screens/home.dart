@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wasafi_market/screens/category.dart';
+import 'package:wasafi_market/screens/directed_screens/category.dart';
 import 'package:wasafi_market/widgets/category_card.dart';
 import 'package:wasafi_market/widgets/home_slider.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_list.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 
-import '../widgets/text_tile.dart';
+import '../../widgets/text_tile.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);

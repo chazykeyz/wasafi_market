@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:story_view/story_view.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:transformer_page_view/transformer_page_view.dart';
-import 'package:wasafi_market/screens/home.dart';
+import 'package:wasafi_market/screens/navigation_screens/home.dart';
 import 'package:wasafi_market/widgets/avatar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';

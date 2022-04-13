@@ -72,7 +72,7 @@ class Explore extends StatelessWidget {
                   text: "Trending Product", size: 14, color: Colors.blueAccent),
             ),
             SizedBox(
-              height: 230,
+              height: 203,
               child: ListView.builder(
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
@@ -96,7 +96,7 @@ class Explore extends StatelessWidget {
                   text: "Trending Product", size: 14, color: Colors.blueAccent),
             ),
             SizedBox(
-              height: 230,
+              height: 203,
               child: ListView.builder(
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
@@ -121,7 +121,7 @@ class Explore extends StatelessWidget {
                   size: 20,
                 )),
             SizedBox(
-              height: 180,
+              height: 110,
               child: ListView.builder(
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,

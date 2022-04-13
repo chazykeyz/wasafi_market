@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasafi_market/widgets/seller.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
-import 'package:wasafi_market/widgets/text/regular.dart';
 
 class Shops extends StatelessWidget {
   const Shops({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class Shops extends StatelessWidget {
                 size: 20,
               )),
           SizedBox(
-            height: 180,
+            height: 110,
             child: ListView.builder(
                 itemCount: 6,
                 scrollDirection: Axis.horizontal,
@@ -35,6 +34,14 @@ class Shops extends StatelessWidget {
                   return const Seller();
                 }),
           ),
+          Center(
+            child: Container(
+              height: .5,
+              margin: const EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 100,
+              color: Colors.white24,
+            ),
+          )
         ]),
       ),
       SliverToBoxAdapter(
@@ -47,7 +54,7 @@ class Shops extends StatelessWidget {
                 size: 20,
               )),
           SizedBox(
-            height: 180,
+            height: 110,
             child: ListView.builder(
                 itemCount: 6,
                 scrollDirection: Axis.horizontal,
@@ -55,6 +62,14 @@ class Shops extends StatelessWidget {
                   return const Seller();
                 }),
           ),
+          Center(
+            child: Container(
+              height: .5,
+              margin: const EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 100,
+              color: Colors.white24,
+            ),
+          )
         ]),
       ),
       SliverToBoxAdapter(
@@ -67,7 +82,7 @@ class Shops extends StatelessWidget {
                 size: 20,
               )),
           SizedBox(
-            height: 180,
+            height: 110,
             child: ListView.builder(
                 itemCount: 6,
                 scrollDirection: Axis.horizontal,
@@ -75,6 +90,14 @@ class Shops extends StatelessWidget {
                   return const Seller();
                 }),
           ),
+          Center(
+            child: Container(
+              height: .5,
+              margin: const EdgeInsets.only(top: 20),
+              width: MediaQuery.of(context).size.width - 100,
+              color: Colors.white24,
+            ),
+          )
         ]),
       )
     ]);

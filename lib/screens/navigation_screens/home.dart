@@ -6,6 +6,7 @@ import 'package:wasafi_market/widgets/home_slider.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_list.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
+import 'package:wasafi_market/widgets/text/regular.dart';
 
 import '../../widgets/text_tile.dart';
 
@@ -114,6 +115,106 @@ class Home extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const TextTile(
               title: "Featured",
+              more: CategoryDetail(),
+            ),
+            SizedBox(
+              height: 230,
+              child: ListView.builder(
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, index) {
+                    return const ProductCard();
+                  }),
+            ),
+          ]),
+        ),
+        SliverToBoxAdapter(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(children: const [
+                    Icon(
+                      CupertinoIcons.bolt_fill,
+                      color: Colors.white,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Bold(
+                          text: "Flash sales",
+                          size: 16,
+                        )),
+                  ]),
+                  Row(
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(width: 1, color: Colors.white10),
+                            color: Colors.white12),
+                        child: const Center(
+                            child: Regular(
+                                text: "12", size: 14, color: Colors.white)),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child:
+                            Regular(text: ":", size: 15, color: Colors.white),
+                      ),
+                      Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(width: 1, color: Colors.white10),
+                            color: Colors.white12),
+                        child: const Center(
+                            child: Regular(
+                                text: "12", size: 14, color: Colors.white)),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4),
+                        child:
+                            Regular(text: ":", size: 15, color: Colors.white),
+                      ),
+                      Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(width: 1, color: Colors.white10),
+                            color: Colors.white12),
+                        child: const Center(
+                            child: Regular(
+                                text: "12", size: 14, color: Colors.white)),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 230,
+              child: ListView.builder(
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, index) {
+                    return const ProductCard();
+                  }),
+            ),
+          ]),
+        ),
+        SliverToBoxAdapter(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const TextTile(
+              title: "Friday Offer",
               more: CategoryDetail(),
             ),
             SizedBox(

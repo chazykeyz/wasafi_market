@@ -18,30 +18,39 @@ class ProductShortCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Get.to(() => const ProductDetail());
-      },
-      child: ListTile(
-        leading: Container(
-            width: 58,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white12),
-              color: const Color.fromARGB(36, 238, 237, 237),
-              image: DecorationImage(
-                  image: NetworkImage(thumbnail), fit: BoxFit.cover),
-            )),
-        title: Bold(
-          text: title,
-          size: 14,
-        ),
-        subtitle:
-            Regular(text: "Tsh $price", size: 14, color: Colors.blueAccent),
-        trailing: const Icon(
-          CupertinoIcons.clear,
-          size: 16,
-          color: Colors.white,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: InkWell(
+        onTap: () {
+          Get.to(() => const ProductDetail());
+        },
+        child: ListTile(
+          leading: Container(
+              width: 58,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white12),
+                color: const Color.fromARGB(36, 238, 237, 237),
+                image: DecorationImage(
+                    image: NetworkImage(thumbnail), fit: BoxFit.cover),
+              )),
+          title: Bold(
+            text: title,
+            size: 14,
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Regular(text: "Tsh $price", size: 14, color: Colors.blueAccent),
+              const Regular(
+                  text: "out of Stock", size: 14, color: Colors.white54)
+            ],
+          ),
+          trailing: const Icon(
+            CupertinoIcons.clear,
+            size: 16,
+            color: Colors.white,
+          ),
         ),
       ),
     );

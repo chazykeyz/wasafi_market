@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
+import 'package:wasafi_market/screens/directed_screens/category.dart';
+import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -81,7 +84,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: NetworkImage(
-                                  "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"),
+                                  "https://images.unsplash.com/photo-1649789248266-ef1c7f744f6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"),
                               fit: BoxFit.cover)),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
@@ -92,7 +95,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   // the visible image
                   Center(
                     child: Image.network(
-                      "https://images.pexels.com/photos/10774229/pexels-photo-10774229.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+                      "https://images.unsplash.com/photo-1649789248266-ef1c7f744f6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -387,8 +390,8 @@ class _ProductDetailState extends State<ProductDetail> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const TextTile(
-              more: ProductDetail(),
-              title: "From same Seller",
+              more: SellerProfile(),
+              title: "Chazy Keyz",
             ),
             SizedBox(
               height: 230,
@@ -412,7 +415,7 @@ class _ProductDetailState extends State<ProductDetail> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const TextTile(
-              more: ProductDetail(),
+              more: CategoryDetail(),
               title: "Related",
             ),
             SizedBox(

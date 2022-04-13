@@ -34,7 +34,7 @@ class Favorite extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Bold(
-                            text: "Favorite Products",
+                            text: "123 Products",
                             size: 15,
                           ),
                           GestureDetector(

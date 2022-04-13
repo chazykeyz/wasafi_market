@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/widgets/stories.dart';
+import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
-import 'package:wasafi_market/widgets/text/regular.dart';
 
 class Seller extends StatelessWidget {
   const Seller({Key? key}) : super(key: key);
@@ -12,14 +11,15 @@ class Seller extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const Story());
+        Get.to(() => const SellerProfile());
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: const Color.fromARGB(44, 19, 46, 129),
-        ),
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white10,
+            border: Border.all(width: 1, color: Colors.white10)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Container(
@@ -65,21 +65,6 @@ class Seller extends StatelessWidget {
                         ),
                       )
                     ]),
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.all(4),
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  height: 34,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Center(
-                    child: Regular(
-                      color: Colors.black,
-                      text: "Follow ",
-                      size: 15,
-                    ),
                   ),
                 ),
               ]),

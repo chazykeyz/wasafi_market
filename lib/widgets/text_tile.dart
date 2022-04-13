@@ -22,7 +22,7 @@ class TextTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: Bold(
                 text: title,
-                size: 18,
+                size: 16,
               )),
           GestureDetector(
             onTap: () {
@@ -34,7 +34,7 @@ class TextTile extends StatelessWidget {
                 Regular(
                   text: "See More ",
                   color: Colors.blue,
-                  size: 15,
+                  size: 14,
                 ),
                 Icon(
                   CupertinoIcons.chevron_right,

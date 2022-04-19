@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:wasafi_market/screens/directed_screens/signup.dart';
 import 'package:wasafi_market/screens/navigation_screens/account.dart';
 import 'package:wasafi_market/screens/navigation_screens/cart.dart';
 import 'package:wasafi_market/screens/navigation_screens/home.dart';
@@ -57,7 +58,7 @@ class _ParentState extends State<Parent> {
 
 //  the screen children
   final List _screenChildren = const [
-    Home(),
+    SignUp(),
     Explore(),
     Shops(),
     Cart(),

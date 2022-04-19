@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/screens/directed_screens/favorite.dart';
 import 'package:wasafi_market/screens/directed_screens/order.dart';
+import 'package:wasafi_market/screens/directed_screens/subscription.dart';
 import 'package:wasafi_market/widgets/order_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -313,7 +314,7 @@ class Account extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.to(() => const Favorite());
+                            Get.to(() => const Subscription());
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -354,7 +355,7 @@ class Account extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: Regular(
-                                text: "History ",
+                                text: "My Products ",
                                 size: 15,
                                 color: Colors.white70,
                               ),
@@ -399,7 +400,7 @@ class Account extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.0),
                               child: Regular(
-                                text: "Help ",
+                                text: "Received Orders ",
                                 size: 15,
                                 color: Colors.white70,
                               ),

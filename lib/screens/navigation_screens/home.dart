@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wasafi_market/screens/directed_screens/category.dart';
 import 'package:wasafi_market/widgets/category_card.dart';
-import 'package:wasafi_market/widgets/home_slider.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
-import 'package:wasafi_market/widgets/stories_list.dart';
+import 'package:wasafi_market/widgets/stories_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
@@ -61,20 +60,6 @@ class Home extends StatelessWidget {
           ]),
         ),
         SliverToBoxAdapter(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Padding(
-                  padding: EdgeInsets.only(left: 10, top: 20),
-                  child: Bold(
-                    text: "Featured",
-                    size: 18,
-                  ),
-                ),
-                HomeSlider()
-              ]),
-        ),
-        SliverToBoxAdapter(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Center(
@@ -114,7 +99,7 @@ class Home extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const TextTile(
-              title: "Featured",
+              title: "Recommended",
               more: CategoryDetail(),
             ),
             SizedBox(
@@ -123,7 +108,25 @@ class Home extends StatelessWidget {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
+                  }),
+            ),
+          ]),
+        ),
+        SliverToBoxAdapter(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const TextTile(
+              title: "Trending",
+              more: CategoryDetail(),
+            ),
+            SizedBox(
+              height: 230,
+              child: ListView.builder(
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, index) {
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
           ]),
@@ -205,7 +208,7 @@ class Home extends StatelessWidget {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 45);
                   }),
             ),
           ]),
@@ -223,7 +226,7 @@ class Home extends StatelessWidget {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
           ]),

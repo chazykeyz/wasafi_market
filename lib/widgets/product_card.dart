@@ -8,7 +8,8 @@ import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  const ProductCard({Key? key, required this.isFlash}) : super(key: key);
+  final int isFlash;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,24 @@ class ProductCard extends StatelessWidget {
                       fit: BoxFit.fill,
                     ),
                   ),
+                  isFlash != 0
+                      ? Positioned(
+                          top: 4,
+                          left: 4,
+                          child: Container(
+                            height: 35,
+                            width: 40,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                color: Colors.red),
+                            child: Center(
+                                child: Regular(
+                                    text: "$isFlash%",
+                                    size: 14,
+                                    color: Colors.white)),
+                          ),
+                        )
+                      : Container()
                 ]),
               ),
             ),

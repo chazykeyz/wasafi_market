@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -399,7 +398,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
             Center(
@@ -424,7 +423,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
           ]),

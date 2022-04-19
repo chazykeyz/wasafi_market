@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:wasafi_market/screens/navigation_screens/favorite.dart';
+import 'package:wasafi_market/screens/navigation_screens/account.dart';
+import 'package:wasafi_market/screens/navigation_screens/cart.dart';
 import 'package:wasafi_market/screens/navigation_screens/home.dart';
 import 'package:wasafi_market/screens/navigation_screens/explore.dart';
 import 'package:wasafi_market/screens/navigation_screens/shops.dart';
+import 'package:wasafi_market/widgets/text/regular.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,8 +60,8 @@ class _ParentState extends State<Parent> {
     Home(),
     Explore(),
     Shops(),
-    Favorite(),
-    Text("page 5"),
+    Cart(),
+    Account(),
   ];
 
   @override
@@ -79,9 +81,9 @@ class _ParentState extends State<Parent> {
             currentIndex: selectedItem,
             selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
             unselectedItemColor: const Color.fromARGB(255, 101, 100, 100),
-            items: const [
+            items: [
               // the home navigation
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 backgroundColor: Colors.black,
                 icon: Icon(
                   Ionicons.home_outline,
@@ -92,7 +94,7 @@ class _ParentState extends State<Parent> {
               )
 //        explore navigation
               ,
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.location_north),
                 activeIcon: Icon(CupertinoIcons.location_north_fill),
@@ -100,18 +102,37 @@ class _ParentState extends State<Parent> {
               )
               //  shop navigation
               ,
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.bag),
                 label: "Shops",
               ),
               BottomNavigationBarItem(
                 backgroundColor: Colors.black,
-                icon: Icon(CupertinoIcons.hand_thumbsup),
-                activeIcon: Icon(CupertinoIcons.hand_thumbsup_fill),
-                label: "Favorite",
+                icon: SizedBox(
+                  width: 35,
+                  child: Stack(children: [
+                    const Icon(CupertinoIcons.cart),
+                    Positioned(
+                        left: 14,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.blueAccent),
+                          child: const Center(
+                            child: Regular(
+                                text: "10", size: 12, color: Colors.white),
+                          ),
+                        ))
+                  ]),
+                ),
+                activeIcon: const Icon(CupertinoIcons.cart_fill),
+                label: "Cart",
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
+                backgroundColor: Colors.black,
                 icon: Icon(CupertinoIcons.person_alt_circle),
                 activeIcon: Icon(CupertinoIcons.person_alt_circle_fill),
                 label: "Account",

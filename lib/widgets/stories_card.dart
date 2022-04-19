@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/widgets/stories.dart';
+import 'package:wasafi_market/widgets/stories_detail.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class Status extends StatelessWidget {
@@ -51,7 +51,8 @@ class Status extends StatelessWidget {
                             width: 60,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
-                                border: Border.all(width: 2, color: Colors.red),
+                                border: Border.all(
+                                    width: 2, color: Colors.redAccent),
                                 color: Colors.white),
                             child: Center(
                               child: Container(

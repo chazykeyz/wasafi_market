@@ -257,6 +257,8 @@ class _SearchState extends State<Search> {
                                       itemCount: 20,
                                       itemBuilder: (context, index) {
                                         return const ProductShortCard(
+                                            isCart: false,
+                                            isOrder: false,
                                             price: "1,000,000",
                                             title: "Iphone 13 Pro Max",
                                             thumbnail:

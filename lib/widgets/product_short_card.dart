@@ -2,19 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/screens/directed_screens/product_detail.dart';
+import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class ProductShortCard extends StatelessWidget {
   const ProductShortCard(
       {Key? key,
+      required this.isOrder,
       required this.price,
+      required this.isCart,
       required this.title,
       required this.thumbnail})
       : super(key: key);
   final String price;
   final String title;
   final String thumbnail;
+  final bool isCart;
+  final bool isOrder;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +46,37 @@ class ProductShortCard extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Regular(text: "Tsh $price", size: 14, color: Colors.blueAccent),
-              const Regular(
-                  text: "out of Stock", size: 14, color: Colors.white54)
+              isCart
+                  ? Regular(
+                      text: "Tsh $price x 2",
+                      size: 14,
+                      color: Colors.blueAccent)
+                  : Regular(
+                      text: "Tsh $price ", size: 14, color: Colors.white54),
+              isOrder
+                  ? GestureDetector(
+                      onTap: () {
+                        Get.to(() => const SellerProfile());
+                      },
+                      child: const Regular(
+                          text: "Chazy keyz",
+                          size: 14,
+                          color: Colors.blueAccent),
+                    )
+                  : const Regular(
+                      text: "out of Stock", size: 14, color: Colors.white54)
             ],
           ),
-          trailing: const Icon(
-            CupertinoIcons.clear,
-            size: 16,
-            color: Colors.white,
-          ),
+          trailing: isOrder
+              ? const Bold(
+                  text: "Tsh 20,000,000",
+                  size: 14,
+                )
+              : const Icon(
+                  CupertinoIcons.clear,
+                  size: 16,
+                  color: Colors.white,
+                ),
         ),
       ),
     );

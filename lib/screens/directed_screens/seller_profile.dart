@@ -69,7 +69,7 @@ class SellerProfile extends StatelessWidget {
                             children: const [
                               Bold(text: "124", size: 16),
                               Regular(
-                                  text: "Followers",
+                                  text: "Subscribers",
                                   size: 15,
                                   color: Colors.white54)
                             ],
@@ -91,12 +91,13 @@ class SellerProfile extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         height: 34,
                         decoration: BoxDecoration(
-                            color: const Color.fromARGB(27, 255, 255, 255),
+                            border: Border.all(color: Colors.white12),
+                            color: const Color.fromARGB(68, 36, 80, 157),
                             borderRadius: BorderRadius.circular(10)),
                         child: const Center(
                           child: Regular(
                             color: Colors.white,
-                            text: "Follow",
+                            text: "Subscribe",
                             size: 15,
                           ),
                         ),
@@ -187,7 +188,7 @@ class SellerProfile extends StatelessWidget {
           SliverGrid(
               delegate:
                   SliverChildBuilderDelegate((BuildContext context, int index) {
-                return const ProductCard();
+                return const ProductCard(isFlash: 0);
               }, childCount: 10),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

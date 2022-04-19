@@ -70,7 +70,7 @@ class CategoryDetail extends StatelessWidget {
             SliverGrid(
                 delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                  return const ProductCard();
+                  return const ProductCard(isFlash: 0);
                 }, childCount: 10),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

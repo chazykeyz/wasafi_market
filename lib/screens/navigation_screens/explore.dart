@@ -77,7 +77,7 @@ class Explore extends StatelessWidget {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
           ]),
@@ -101,7 +101,7 @@ class Explore extends StatelessWidget {
                   itemCount: 6,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, index) {
-                    return const ProductCard();
+                    return const ProductCard(isFlash: 0);
                   }),
             ),
           ]),

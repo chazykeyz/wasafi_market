@@ -2,15 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:wasafi_market/screens/directed_screens/signup.dart';
+import 'package:wasafi_market/screens/free_screens/signin.dart';
 import 'package:wasafi_market/screens/navigation_screens/account.dart';
 import 'package:wasafi_market/screens/navigation_screens/cart.dart';
-import 'package:wasafi_market/screens/navigation_screens/home.dart';
 import 'package:wasafi_market/screens/navigation_screens/explore.dart';
+import 'package:wasafi_market/screens/navigation_screens/home.dart';
 import 'package:wasafi_market/screens/navigation_screens/shops.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
+import 'helper/dependencies.dart' as dep;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dep.init();
   runApp(const MyApp());
 }
 
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Parent(),
+      home: const SignIn(),
     );
   }
 }
@@ -58,7 +61,7 @@ class _ParentState extends State<Parent> {
 
 //  the screen children
   final List _screenChildren = const [
-    SignUp(),
+    Home(),
     Explore(),
     Shops(),
     Cart(),

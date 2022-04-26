@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/main.dart';
-import 'package:wasafi_market/screens/directed_screens/signup.dart';
+import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
@@ -81,7 +81,7 @@ class SignIn extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Get.to(() => const SignUp());
+              Get.to(() => const SignUp(), transition: Transition.zoom);
             },
             child: const Regular(
                 text: " Have no account Yet? Sign Up Now",

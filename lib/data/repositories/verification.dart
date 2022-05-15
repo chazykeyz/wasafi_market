@@ -17,9 +17,6 @@ class VerificationRepo {
   saveVerifiedUserToken(String token, String refresh) async {
     apiClient.token = token;
     apiClient.updateHeader(token);
-    print("success done and verified...");
-    print(token);
-    print(refresh);
     await sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
     return await sharedPreferences.setString(AppConstant.TOKEN, token);
   }

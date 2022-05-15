@@ -13,7 +13,8 @@ import 'package:wasafi_market/widgets/text/regular.dart';
 import 'package:wasafi_market/widgets/text_tile.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({Key? key}) : super(key: key);
+  const ProductDetail({Key? key, required this.data}) : super(key: key);
+  final dynamic data;
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -80,10 +81,10 @@ class _ProductDetailState extends State<ProductDetail> {
                   // the blurred image
                   ClipRRect(
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://images.unsplash.com/photo-1649789248266-ef1c7f744f6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"),
+                              image:
+                                  NetworkImage(widget.data.thumbnails[index]),
                               fit: BoxFit.cover)),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
@@ -94,7 +95,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   // the visible image
                   Center(
                     child: Image.network(
-                      "https://images.unsplash.com/photo-1649789248266-ef1c7f744f6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
+                      widget.data.thumbnails[index],
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -111,7 +112,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   )
                 ]);
               },
-              itemCount: 3,
+              itemCount: widget.data.thumbnails.length,
             ),
           ),
         ),
@@ -124,7 +125,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Bold(text: "Maniac Red Boys", size: 22),
+                    Bold(text: widget.data.name, size: 22),
                     GestureDetector(
                         onTap: () {
                           Get.back();
@@ -158,12 +159,13 @@ class _ProductDetailState extends State<ProductDetail> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
-                    children: const [
-                      Bold(text: "Tsh 1,000,000", size: 20),
+                    children: [
+                      const Bold(text: "Tsh ", size: 20),
+                      Bold(text: widget.data.price.toString(), size: 20),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text("Tsh 1,000,000",
-                            style: TextStyle(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(widget.data.discount.toString(),
+                            style: const TextStyle(
                               fontSize: 18,
                               decoration: TextDecoration.lineThrough,
                               color: Colors.white54,
@@ -385,49 +387,6 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
         ),
-        SliverToBoxAdapter(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const TextTile(
-              more: SellerProfile(),
-              title: "Chazy Keyz",
-            ),
-            SizedBox(
-              height: 230,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return const ProductCard(isFlash: 0);
-                  }),
-            ),
-            Center(
-              child: Container(
-                height: .5,
-                width: MediaQuery.of(context).size.width - 100,
-                color: Colors.white24,
-              ),
-            )
-          ]),
-        ),
-        SliverToBoxAdapter(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const TextTile(
-              more: CategoryDetail(),
-              title: "Related",
-            ),
-            SizedBox(
-              height: 230,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return const ProductCard(isFlash: 0);
-                  }),
-            ),
-          ]),
-        )
       ]),
     );
   }

@@ -75,7 +75,8 @@ class Subscription extends StatelessWidget {
                                 itemCount: 6,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (BuildContext context, index) {
-                                  return const ProductCard(isFlash: 0);
+                                  return const ProductCard(
+                                      isFlash: 0, data: {});
                                 }),
                           ),
                         ]);

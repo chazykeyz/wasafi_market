@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wasafi_market/constant.dart';
-import 'package:wasafi_market/controllers/auth_controller.dart';
+import 'package:wasafi_market/controllers/auth.dart';
+import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/verification.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
-import 'package:wasafi_market/data/repositories/authentication.dart';
+import 'package:wasafi_market/data/repositories/auth.dart';
+import 'package:wasafi_market/data/repositories/products.dart';
 import 'package:wasafi_market/data/repositories/verification.dart';
 
 Future<void> init() async {
@@ -19,8 +21,10 @@ Future<void> init() async {
       () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
   Get.lazyPut(() =>
       VerificationRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  Get.lazyPut(() => ProductRepo(apiClient: Get.find()));
 
   // CONTROLLERS
   Get.lazyPut(() => AuthController(authRepo: Get.find()));
   Get.lazyPut(() => VerificationController(verificationRepo: Get.find()));
+  Get.lazyPut(() => ProductsController(productRepo: Get.find()));
 }

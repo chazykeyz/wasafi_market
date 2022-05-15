@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/screens/directed_screens/category.dart';
 import 'package:wasafi_market/widgets/category_card.dart';
+import 'package:wasafi_market/widgets/loads/product.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
@@ -61,181 +64,62 @@ class Home extends StatelessWidget {
               ),
             ]),
           ),
-          SliverToBoxAdapter(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Center(
-                child: Container(
-                  height: .5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  width: MediaQuery.of(context).size.width - 100,
-                  color: Colors.white24,
-                ),
-              ),
-              const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  child: Bold(
-                    text: "Categories",
-                    size: 18,
-                  )),
-              SizedBox(
-                height: 130,
-                child: ListView.builder(
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, index) {
-                      return const CatergoryCard();
-                    }),
-              ),
-              Center(
-                child: Container(
-                  height: .5,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  width: MediaQuery.of(context).size.width - 100,
-                  color: Colors.white24,
-                ),
-              )
-            ]),
+          GetBuilder<ProductsController>(
+            builder: (controllerData) {
+              return SliverToBoxAdapter(
+                child: controllerData.isLoading
+                    ? const ProductLoader()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            const TextTile(
+                              title: "Trending",
+                              more: CategoryDetail(),
+                            ),
+                            SizedBox(
+                              height: 230,
+                              child: ListView.builder(
+                                  itemCount: controllerData.productList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (BuildContext context, index) {
+                                    return ProductCard(
+                                        isFlash: 0,
+                                        data:
+                                            controllerData.productList[index]);
+                                  }),
+                            ),
+                          ]),
+              );
+            },
           ),
-          SliverToBoxAdapter(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const TextTile(
-                title: "Recommended",
-                more: CategoryDetail(),
-              ),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, index) {
-                      return const ProductCard(isFlash: 0);
-                    }),
-              ),
-            ]),
+          GetBuilder<ProductsController>(
+            builder: (controllerData) {
+              return SliverToBoxAdapter(
+                child: controllerData.isLoading
+                    ? const ProductLoader()
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            const TextTile(
+                              title: "Trending",
+                              more: CategoryDetail(),
+                            ),
+                            SizedBox(
+                              height: 230,
+                              child: ListView.builder(
+                                  itemCount: controllerData.productList.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (BuildContext context, index) {
+                                    return ProductCard(
+                                        isFlash: 0,
+                                        data:
+                                            controllerData.productList[index]);
+                                  }),
+                            ),
+                          ]),
+              );
+            },
           ),
-          SliverToBoxAdapter(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const TextTile(
-                title: "Trending",
-                more: CategoryDetail(),
-              ),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, index) {
-                      return const ProductCard(isFlash: 0);
-                    }),
-              ),
-            ]),
-          ),
-          SliverToBoxAdapter(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Row(children: const [
-                      Icon(
-                        CupertinoIcons.bolt_fill,
-                        color: Colors.white,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Bold(
-                            text: "Flash sales",
-                            size: 16,
-                          )),
-                    ]),
-                    Row(
-                      children: [
-                        Container(
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border:
-                                  Border.all(width: 1, color: Colors.white10),
-                              color: Colors.white12),
-                          child: const Center(
-                              child: Regular(
-                                  text: "12", size: 14, color: Colors.white)),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4),
-                          child:
-                              Regular(text: ":", size: 15, color: Colors.white),
-                        ),
-                        Container(
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border:
-                                  Border.all(width: 1, color: Colors.white10),
-                              color: Colors.white12),
-                          child: const Center(
-                              child: Regular(
-                                  text: "12", size: 14, color: Colors.white)),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 4),
-                          child:
-                              Regular(text: ":", size: 15, color: Colors.white),
-                        ),
-                        Container(
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              border:
-                                  Border.all(width: 1, color: Colors.white10),
-                              color: Colors.white12),
-                          child: const Center(
-                              child: Regular(
-                                  text: "12", size: 14, color: Colors.white)),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, index) {
-                      return const ProductCard(isFlash: 45);
-                    }),
-              ),
-            ]),
-          ),
-          SliverToBoxAdapter(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const TextTile(
-                title: "Friday Offer",
-                more: CategoryDetail(),
-              ),
-              SizedBox(
-                height: 230,
-                child: ListView.builder(
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, index) {
-                      return const ProductCard(isFlash: 0);
-                    }),
-              ),
-            ]),
-          )
         ],
       ),
     );

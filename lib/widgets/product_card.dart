@@ -8,14 +8,18 @@ import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key, required this.isFlash}) : super(key: key);
+  const ProductCard({Key? key, required this.isFlash, required this.data})
+      : super(key: key);
   final int isFlash;
+  final dynamic data;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const ProductDetail());
+        Get.to(() => ProductDetail(
+              data: data,
+            ));
       },
       child: Container(
         margin: const EdgeInsets.all(4),
@@ -30,10 +34,9 @@ class ProductCard extends StatelessWidget {
                 child: Stack(children: [
                   ClipRRect(
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(
-                                  "https://images.pexels.com/photos/8386657/pexels-photo-8386657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"),
+                              image: NetworkImage(data.thumbnails[0]),
                               fit: BoxFit.cover)),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
@@ -45,7 +48,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   Center(
                     child: Image.network(
-                      "https://images.pexels.com/photos/8386657/pexels-photo-8386657.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                      data.thumbnails[0],
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -77,12 +80,21 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Bold(text: "Jean Rotten", size: 14),
-                          Regular(
-                            text: "Tsh 1000,000",
-                            size: 13,
-                            color: Colors.white,
+                        children: [
+                          Bold(text: data.name, size: 14),
+                          Row(
+                            children: [
+                              const Regular(
+                                text: "Tsh ",
+                                size: 13,
+                                color: Colors.white,
+                              ),
+                              Regular(
+                                text: data.price.toString(),
+                                size: 13,
+                                color: Colors.white,
+                              )
+                            ],
                           )
                         ],
                       ),

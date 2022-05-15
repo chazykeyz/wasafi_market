@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/controllers/auth_controller.dart';
+import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/verification.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/sign_up.dart';
@@ -43,12 +43,10 @@ class SignUp extends StatelessWidget {
             title: 'Password');
       } else {
         SignUpBody signUpBody = SignUpBody(
-            username: username,
-            phone: phone.substring(1),
-            password: password,
-            gender: "male",
-            email: "chazy2@gmail.com",
-            age: 33);
+          username: username,
+          mobileNumber: phone.substring(1),
+          password: password,
+        );
 
         authController.registration(signUpBody).then((status) {
           if (status.isSuccess) {
@@ -62,7 +60,7 @@ class SignUp extends StatelessWidget {
                 builder: (context) {
                   TextEditingController codeController =
                       TextEditingController();
-                  var number = signUpBody.phone;
+                  var number = signUpBody.mobileNumber;
 
                   void sendVerify(String text) {
                     String code = codeController.text.trim();
@@ -211,6 +209,7 @@ class SignUp extends StatelessWidget {
                         color: Colors.white12),
                     child: TextField(
                       controller: usernameController,
+                      autocorrect: false,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -248,6 +247,8 @@ class SignUp extends StatelessWidget {
                     child: TextField(
                       controller: passwordController,
                       style: const TextStyle(color: Colors.white),
+                      obscureText: true,
+                      obscuringCharacter: "*",
                       decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: Colors.white70),

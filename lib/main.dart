@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/screens/free_screens/signin.dart';
+import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/screens/navigation_screens/account.dart';
 import 'package:wasafi_market/screens/navigation_screens/cart.dart';
 import 'package:wasafi_market/screens/navigation_screens/explore.dart';
@@ -23,6 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Get.find<ProductsController>().getProducts();
     return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignIn(),
+      home: const Parent(),
     );
   }
 }
@@ -61,11 +64,15 @@ class _ParentState extends State<Parent> {
 
 //  the screen children
   final List _screenChildren = const [
-    Home(),
-    Explore(),
-    Shops(),
-    Cart(),
-    Account(),
+    SignUp(),
+    // Explore(),
+    // Shops(),
+    // Cart(),
+    // Account(),
+    Text("hi"),
+    Text("hi"),
+    Text("hi"),
+    Text("hi")
   ];
 
   @override

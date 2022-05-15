@@ -27,7 +27,7 @@ class ProductShortCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
         onTap: () {
-          Get.to(() => const ProductDetail());
+          // Get.to(() => const ProductDetail());
         },
         child: ListTile(
           leading: Container(

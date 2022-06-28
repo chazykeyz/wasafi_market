@@ -15,6 +15,9 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int discountPercent = int.parse(
+        ((data.discount / data.price) * 100.round()).toStringAsFixed(0));
+
     return InkWell(
       onTap: () {
         Get.to(() => ProductDetail(
@@ -36,7 +39,7 @@ class ProductCard extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(data.thumbnails[0]),
+                              image: NetworkImage(data.thumbnail[0]),
                               fit: BoxFit.cover)),
                       child: BackdropFilter(
                         filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
@@ -48,7 +51,7 @@ class ProductCard extends StatelessWidget {
                   ),
                   Center(
                     child: Image.network(
-                      data.thumbnails[0],
+                      data.thumbnail[0],
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -64,7 +67,7 @@ class ProductCard extends StatelessWidget {
                                 color: Colors.red),
                             child: Center(
                                 child: Regular(
-                                    text: "$isFlash%",
+                                    text: "$discountPercent%",
                                     size: 14,
                                     color: Colors.white)),
                           ),

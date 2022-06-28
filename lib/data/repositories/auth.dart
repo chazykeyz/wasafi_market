@@ -2,8 +2,9 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wasafi_market/constant.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
-import 'package:wasafi_market/models/sign_in.dart';
-import 'package:wasafi_market/models/sign_up.dart';
+import 'package:wasafi_market/models/auth/password.dart';
+import 'package:wasafi_market/models/auth/sign_in.dart';
+import 'package:wasafi_market/models/auth/sign_up.dart';
 
 class AuthRepo {
   final ApiClient apiClient;
@@ -21,18 +22,42 @@ class AuthRepo {
     return await apiClient.postData(AppConstant.SIGNIN, signInBody.toJson());
   }
 
+  // checking token
+  bool checkingToken() {
+    return sharedPreferences.containsKey(AppConstant.TOKEN);
+  }
+
+  Future<String> getToken() async {
+    return sharedPreferences.getString(AppConstant.TOKEN) ?? "None";
+  }
+
+  // loggin out clearing the local storage
+  bool clearedSharedData() {
+    sharedPreferences.remove(AppConstant.REFRESH_TOKEN);
+    sharedPreferences.remove(AppConstant.TOKEN);
+    apiClient.token = "";
+    apiClient.updateHeader("");
+    return true;
+  }
+
   // saving the pre token
   saveUserToken(String token, String refresh) async {
     apiClient.token = token;
     apiClient.updateHeader(token);
-    await sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
-    await sharedPreferences.setString(AppConstant.TOKEN, token);
+    sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
+    sharedPreferences.setString(AppConstant.TOKEN, token);
   }
 
 // save the main tokens
   savePreRegistUserToken(String token) async {
     apiClient.token = token;
     apiClient.updateHeader(token);
-    await sharedPreferences.setString(AppConstant.TOKEN, token);
+    sharedPreferences.setString(AppConstant.TOKEN, token);
+  }
+
+  // changing password
+  Future<Response> changingPassword(PasswordChange passwordChange) {
+    return apiClient.postData(
+        AppConstant.PASSWORDCHANGE, passwordChange.toJson());
   }
 }

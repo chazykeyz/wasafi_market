@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/screens/directed_screens/product_detail.dart';
 import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -13,13 +12,15 @@ class ProductShortCard extends StatelessWidget {
       required this.price,
       required this.isCart,
       required this.title,
-      required this.thumbnail})
+      required this.thumbnail,
+      required this.quantity})
       : super(key: key);
   final String price;
   final String title;
   final String thumbnail;
   final bool isCart;
   final bool isOrder;
+  final int quantity;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class ProductShortCard extends StatelessWidget {
             children: [
               isCart
                   ? Regular(
-                      text: "Tsh $price x 2",
+                      text: "Tsh $price x $quantity",
                       size: 14,
                       color: Colors.blueAccent)
                   : Regular(

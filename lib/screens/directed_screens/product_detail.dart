@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/screens/directed_screens/category.dart';
-import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
+import 'package:wasafi_market/controllers/auth.dart';
+import 'package:wasafi_market/controllers/cart.dart';
+import 'package:wasafi_market/controllers/user.dart';
+import 'package:wasafi_market/models/cart/cart.dart';
+import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
+import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
-import 'package:wasafi_market/widgets/text_tile.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail({Key? key, required this.data}) : super(key: key);
@@ -25,369 +28,565 @@ class _ProductDetailState extends State<ProductDetail> {
   int _color = 0;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!Get.find<AuthController>().logginUser()) {
+        Get.to(() => const SignUp());
+      } else {
+        Get.find<UserController>().gettingUser();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // add to cart
+    void addToCart(item) {
+      CartController cartController = Get.find<CartController>();
+      CartModel cartModel = CartModel(product: item.id);
+      cartController.cartPost(cartModel).then((status) {
+        if (status.isSuccess) {
+          dynamic name = item.name;
+          showCustomSnackBar("$name added to cart", title: "Cart");
+          Get.find<UserController>().gettingUser();
+        } else {
+          showCustomSnackBar("adding cart failed!", title: "Cart");
+        }
+      });
+    }
+
+// remove from cart
+    void removeFromCart(item) {
+      CartController cartController = Get.find<CartController>();
+
+      cartController.cartItemRemove(item.id).then((status) {
+        if (status.isSuccess) {
+          dynamic name = item.name;
+          showCustomSnackBar("$name successful deleted!", title: "Cart");
+          Get.find<UserController>().gettingUser();
+        } else {
+          showCustomSnackBar("deleting item failed!", title: "Cart");
+        }
+      });
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
-      body: CustomScrollView(slivers: [
-        SliverAppBar(
-          backgroundColor: Colors.black,
-          leading: GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Center(
-                child: Container(
-                    margin: const EdgeInsets.all(5),
-                    width: 47,
-                    height: 47,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(28),
-                        color: Colors.white24),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: const Icon(CupertinoIcons.chevron_back)),
-                    )),
-              )),
-          actions: [
-            GestureDetector(
-                onTap: () {},
-                child: Container(
-                    margin: const EdgeInsets.all(5),
-                    width: 47,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(28),
-                        color: Colors.white24),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: const Icon(CupertinoIcons.hand_thumbsup)),
-                    )))
-          ],
-          pinned: true,
-          floating: true,
-          expandedHeight: MediaQuery.of(context).size.width + 20,
-          collapsedHeight: 60,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Swiper(
-              autoplay: true,
-              autoplayDelay: 2000,
-              loop: true,
-              itemWidth: MediaQuery.of(context).size.width,
-              itemBuilder: (BuildContext context, int index) {
-                return Stack(children: [
-                  // the blurred image
-                  ClipRRect(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image:
-                                  NetworkImage(widget.data.thumbnails[index]),
-                              fit: BoxFit.cover)),
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                        child: Container(),
-                      ),
-                    ),
-                  ),
-                  // the visible image
-                  Center(
-                    child: Image.network(
-                      widget.data.thumbnails[index],
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  // gradient colors
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            colors: [
-                          Colors.black,
-                          Colors.black.withOpacity(0)
-                        ])),
-                  )
-                ]);
-              },
-              itemCount: widget.data.thumbnails.length,
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Bold(text: widget.data.name, size: 22),
-                    GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Center(
-                          child: Container(
-                              margin: const EdgeInsets.all(5),
-                              width: 47,
-                              height: 47,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(28),
-                                  color: Colors.white24),
-                              child: ClipRRect(
+      body: GetBuilder<UserController>(builder: (userContent) {
+        return userContent.userList.isEmpty
+            ? const Center(
+                child: CupertinoActivityIndicator(
+                  color: Colors.blueAccent,
+                  radius: 14,
+                ),
+              )
+            : CustomScrollView(slivers: [
+                SliverAppBar(
+                  backgroundColor: Colors.black,
+                  leading: GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Center(
+                        child: Container(
+                            margin: const EdgeInsets.all(5),
+                            width: 47,
+                            height: 47,
+                            decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(28),
-                                child: const Icon(
-                                  CupertinoIcons.share,
-                                  color: Colors.white,
-                                ),
-                              )),
-                        )),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Regular(
-                      text:
-                          "Children’s clothing/ kids wear is usually more casual than adult clothing, fit play and rest. Hosiery is usually used. More recently, however, tons of childrenswear is heavily influenced by trends in adult fashion",
-                      size: 16,
-                      color: Colors.white),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      const Bold(text: "Tsh ", size: 20),
-                      Bold(text: widget.data.price.toString(), size: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(widget.data.discount.toString(),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              decoration: TextDecoration.lineThrough,
-                              color: Colors.white54,
+                                color: Colors.white54),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(28),
+                              child: const Icon(
+                                CupertinoIcons.chevron_back,
+                                color: Colors.black,
+                              ),
                             )),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    height: .5,
-                    width: MediaQuery.of(context).size.width,
-                    color: Colors.white24,
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Bold(text: "Size", size: 16),
-              SizedBox(
-                height: 50,
-                child: ListView.builder(
-                    itemCount: 5,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              size = index;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(3),
-                            width: 40,
-                            height: 40,
+                      )),
+                  actions: [
+                    GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                            margin: const EdgeInsets.all(5),
+                            width: 47,
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1,
-                                    color: size == index
-                                        ? Colors.blueAccent
-                                        : Colors.transparent),
-                                color: const Color.fromARGB(41, 33, 149, 243),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: const Center(
-                              child: Regular(
-                                color: Colors.white,
-                                text: "XL",
-                                size: 14,
+                                borderRadius: BorderRadius.circular(28),
+                                color: Colors.white54),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(28),
+                              child: const Icon(
+                                CupertinoIcons.hand_thumbsup,
+                                color: Colors.black,
+                              ),
+                            )))
+                  ],
+                  pinned: true,
+                  floating: true,
+                  expandedHeight: MediaQuery.of(context).size.width + 20,
+                  collapsedHeight: 60,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Swiper(
+                      autoplay: true,
+                      autoplayDelay: 2000,
+                      loop: true,
+                      itemWidth: MediaQuery.of(context).size.width,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Stack(children: [
+                          // the blurred image
+                          ClipRRect(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          widget.data.thumbnail[index]),
+                                      fit: BoxFit.cover)),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
+                                child: Container(),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }),
-              )
-            ]),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Bold(text: "Color", size: 16),
-              SizedBox(
-                height: 50,
-                child: ListView.builder(
-                    itemCount: 5,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _color = index;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(3),
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1,
-                                    color: _color == index
-                                        ? Colors.blueAccent
-                                        : Colors.transparent),
-                                color: const Color.fromARGB(41, 33, 149, 243),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Center(
-                              child: Container(
-                                height: 38,
-                                width: 38,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 3, color: Colors.black),
-                                    color:
-                                        const Color.fromARGB(41, 243, 96, 33),
-                                    borderRadius: BorderRadius.circular(20)),
-                              ),
+                          // the visible image
+                          Center(
+                            child: Image.network(
+                              widget.data.thumbnail[index],
+                              fit: BoxFit.fill,
                             ),
                           ),
-                        ),
-                      );
-                    }),
-              ),
-              Center(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  height: .5,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white24,
+                          // gradient colors
+                        ]);
+                      },
+                      itemCount: widget.data.thumbnail.length,
+                    ),
+                  ),
                 ),
-              )
-            ]),
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white12, borderRadius: BorderRadius.circular(20)),
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
+                // upper side of ui the title of product and share button
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.all(4),
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.white54,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: const Center(
-                            child: Regular(
-                              color: Colors.black,
-                              text: "-",
-                              size: 20,
-                            ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // title
+                            Bold(text: widget.data.name, size: 22),
+                            // share product
+                            GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Center(
+                                  child: Container(
+                                      margin: const EdgeInsets.all(5),
+                                      width: 47,
+                                      height: 47,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(28),
+                                          color: Colors.white24),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(28),
+                                        child: const Icon(
+                                          CupertinoIcons.share,
+                                          color: Colors.white,
+                                        ),
+                                      )),
+                                )),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Regular(
+                              text: widget.data.description,
+                              size: 16,
+                              color: Colors.white),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              const Bold(text: "Tsh ", size: 20),
+                              Bold(
+                                  text: widget.data.price.toString(), size: 20),
+                              widget.data.discount != 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child:
+                                          Text(widget.data.discount.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.white54,
+                                              )),
+                                    )
+                                  : const Text("")
+                            ],
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.all(1),
-                          height: 40,
-                          width: 60,
-                          decoration: BoxDecoration(
-                              color: Colors.white54,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: const Center(
-                            child: Regular(
-                              color: Colors.black,
-                              text: "0",
-                              size: 20,
-                            ),
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            height: .5,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.white24,
                           ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                // sizes
+                SliverToBoxAdapter(
+                  child: widget.data.size.length == 0
+                      ? const SizedBox(
+                          height: 0,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Bold(text: "Size", size: 16),
+                                SizedBox(
+                                  height: 50,
+                                  child: ListView.builder(
+                                      itemCount: widget.data.size.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Center(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                size = index;
+                                              });
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.all(3),
+                                              padding: const EdgeInsets.all(10),
+                                              height: 40,
+                                              constraints: const BoxConstraints(
+                                                  minWidth: 40),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      width: 1,
+                                                      color: size == index
+                                                          ? Colors.blueAccent
+                                                          : Colors.transparent),
+                                                  color: const Color.fromARGB(
+                                                      41, 33, 149, 243),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
+                                              child: Center(
+                                                child: Regular(
+                                                  color: Colors.white,
+                                                  text: widget
+                                                      .data.size[index].size,
+                                                  size: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                )
+                              ]),
                         ),
-                        Container(
-                          margin: const EdgeInsets.all(4),
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.white54,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: const Center(
-                            child: Regular(
-                              color: Colors.black,
-                              text: "+",
-                              size: 20,
+                ),
+                // color
+                SliverToBoxAdapter(
+                  child: widget.data.color.length == 0
+                      ? const SizedBox(
+                          height: 0,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 8),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Bold(text: "Color", size: 16),
+                                SizedBox(
+                                  height: 50,
+                                  child: ListView.builder(
+                                      itemCount: widget.data.color.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Center(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                _color = index;
+                                              });
+                                            },
+                                            child: Center(
+                                              child: Container(
+                                                margin: const EdgeInsets.all(3),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                constraints:
+                                                    const BoxConstraints(
+                                                        maxHeight: 32,
+                                                        minWidth: 38),
+                                                decoration: BoxDecoration(
+                                                    color: _color == index
+                                                        ? Colors.blueAccent
+                                                        : Colors.white
+                                                            .withOpacity(.2),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            14)),
+                                                child: const Center(
+                                                  child: Regular(
+                                                      text: "Orange",
+                                                      size: 12,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                                Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    height: .5,
+                                    width: MediaQuery.of(context).size.width,
+                                    color: Colors.white24,
+                                  ),
+                                )
+                              ]),
+                        ),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white12,
+                        borderRadius: BorderRadius.circular(20)),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    removeFromCart(widget.data);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.all(4),
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white54,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: const Center(
+                                      child: Regular(
+                                        color: Colors.black,
+                                        text: "-",
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.all(1),
+                                  height: 40,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white54,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Center(
+                                    child: Regular(
+                                      color: Colors.black,
+                                      text: userContent.userList[0].cart
+                                                  .where((item) =>
+                                                      item.product ==
+                                                      widget.data.id)
+                                                  .length !=
+                                              0
+                                          ? userContent.userList[0].cart
+                                              .firstWhere((item) =>
+                                                  item.product ==
+                                                  widget.data.id)
+                                              .quantity
+                                              .toString()
+                                          : "0",
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    addToCart(widget.data);
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.all(4),
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white54,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: const Center(
+                                      child: Regular(
+                                        color: Colors.black,
+                                        text: "+",
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                            GestureDetector(
+                              onTap: () {
+                                addToCart(widget.data);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(4),
+                                constraints:
+                                    const BoxConstraints(minWidth: 200),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: userContent.userList[0].cart
+                                                .where((item) =>
+                                                    item.product ==
+                                                    widget.data.id)
+                                                .length !=
+                                            0
+                                        ? Colors.white
+                                        : Colors.blue,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Center(
+                                  child: Regular(
+                                    color: Colors.black,
+                                    text: userContent.userList[0].cart
+                                                .where((item) =>
+                                                    item.product ==
+                                                    widget.data.id)
+                                                .length !=
+                                            0
+                                        ? "Remove from Cart"
+                                        : "Add to cart",
+                                    size: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    Container(
-                      margin: const EdgeInsets.all(4),
-                      padding: const EdgeInsets.symmetric(horizontal: 60),
-                      height: 40,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: const Center(
-                        child: Regular(
-                          color: Colors.black,
-                          text: "Add to Cart",
-                          size: 14,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Bold(text: "OR", size: 18),
-                Container(
-                  margin: const EdgeInsets.all(4),
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
-                  height: 44,
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(16)),
-                  child: const Center(
-                    child: Regular(
-                      color: Colors.black,
-                      text: "Buy Now",
-                      size: 15,
-                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
-      ]),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 10),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(children: [
+                                    Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: const Color.fromARGB(
+                                                31, 255, 255, 255),
+                                            image: DecorationImage(
+                                                image: NetworkImage(widget.data
+                                                    .seller.profilePicture),
+                                                fit: BoxFit.cover))),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Regular(
+                                          text:
+                                              widget.data.seller.user.username,
+                                          size: 14,
+                                          color: Colors.white),
+                                    )
+                                  ]),
+                                  GestureDetector(
+                                    onTap: () {
+                                      // Get.to(() => more);
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Regular(
+                                          text: "See More ",
+                                          color: Colors.blue,
+                                          size: 14,
+                                        ),
+                                        Icon(
+                                          CupertinoIcons.chevron_right,
+                                          color: Colors.blue,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ]),
+                          ),
+                          SizedBox(
+                            height: 230,
+                            child: ListView.builder(
+                                itemCount: widget.data.seller.products.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, index) {
+                                  return ProductCard(
+                                    isFlash: 0,
+                                    data: widget.data.seller.products[index],
+                                  );
+                                }),
+                          ),
+                        ]),
+                  ),
+                ),
+                // // SliverToBoxAdapter(
+                //   child:
+                //       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                //     const TextTile(
+                //       more: CategoryDetail(),
+                //       title: "Related",
+                //     ),
+                //     SizedBox(
+                //       height: 230,
+                //       child: ListView.builder(
+                //           itemCount: 6,
+                //           scrollDirection: Axis.horizontal,
+                //           itemBuilder: (BuildContext context, index) {
+                //             return const ProductCard(isFlash: 0, data: {});
+                //           }),
+                //     ),
+                //   ]),
+                // )
+              ]);
+      }),
     );
   }
 }

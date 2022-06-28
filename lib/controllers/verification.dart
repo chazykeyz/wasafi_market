@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:wasafi_market/data/repositories/verification.dart';
 import 'package:wasafi_market/models/response.dart';
-import 'package:wasafi_market/models/verification.dart';
+import 'package:wasafi_market/models/auth/verification.dart';
 
 class VerificationController extends GetxController implements GetxService {
   final VerificationRepo verificationRepo;

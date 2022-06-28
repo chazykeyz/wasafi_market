@@ -1,9 +1,10 @@
 import 'package:get/get_connect.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:wasafi_market/data/repositories/auth.dart';
+import 'package:wasafi_market/models/auth/password.dart';
 import 'package:wasafi_market/models/response.dart';
-import 'package:wasafi_market/models/sign_in.dart';
-import 'package:wasafi_market/models/sign_up.dart';
+import 'package:wasafi_market/models/auth/sign_in.dart';
+import 'package:wasafi_market/models/auth/sign_up.dart';
 
 class AuthController extends GetxController implements GetxService {
   final AuthRepo authRepo;
@@ -21,14 +22,11 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.registration(signUpBody);
 
     if (response.statusCode == 200) {
-      //  login(signInBody);
-      //  SignInBody signInBody =
-      //       SignInBody(phone: response.body["mobile_number"], password: response.body["password"]);
+      authRepo.savePreRegistUserToken(response.body["token"]);
       responseModel = ResponseModel(true, "registration succeed!");
     } else {
       responseModel = ResponseModel(false, response.body["message"]);
     }
-
     _isLoading = false;
     update();
 
@@ -44,7 +42,7 @@ class AuthController extends GetxController implements GetxService {
 
     if (response.statusCode == 200) {
       authRepo.saveUserToken(
-          response.body["accessToken"], response.body["message"]);
+          response.body["accessToken"], response.body["refreshToken"]);
       _user = response.body['User']['username'];
       update();
       responseModel = ResponseModel(true, response.body["accessToken"]);
@@ -54,5 +52,35 @@ class AuthController extends GetxController implements GetxService {
     _isLoading = false;
     update();
     return responseModel;
+  }
+
+// PASSWORD CHANGE
+  Future<ResponseModel> passwordChange(PasswordChange passwordChange) async {
+    _isLoading = true;
+    update();
+    late ResponseModel responseModel;
+    Response response = await authRepo.changingPassword(passwordChange);
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, response.body);
+    } else {
+      responseModel = ResponseModel(false, response.body);
+    }
+    _isLoading = false;
+    update();
+    return responseModel;
+  }
+
+  bool logginUser() {
+    return authRepo.checkingToken();
+  }
+
+  getToken() {
+    var token = authRepo.getToken();
+    return token;
+  }
+
+  bool clearedSharedData() {
+    return authRepo.clearedSharedData();
   }
 }

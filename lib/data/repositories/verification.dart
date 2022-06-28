@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wasafi_market/constant.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
-import 'package:wasafi_market/models/verification.dart';
+import 'package:wasafi_market/models/auth/verification.dart';
 
 class VerificationRepo {
   final ApiClient apiClient;

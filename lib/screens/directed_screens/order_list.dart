@@ -67,6 +67,7 @@ class OrderList extends StatelessWidget {
                                       return const ProductShortCard(
                                           isCart: false,
                                           isOrder: true,
+                                          quantity: 1,
                                           price: "1,000,000 x 12",
                                           title: "Iphone 13 Pro Max",
                                           thumbnail:

@@ -1,14 +1,17 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/screens/directed_screens/category.dart';
 import 'package:wasafi_market/widgets/category_card.dart';
 import 'package:wasafi_market/widgets/loads/product.dart';
+import 'package:wasafi_market/widgets/loads/product_category.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/stories_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
-import 'package:wasafi_market/widgets/text/regular.dart';
 
 import '../../widgets/text_tile.dart';
 
@@ -22,27 +25,24 @@ class Home extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.transparent,
             pinned: true,
+            toolbarHeight: 10,
+            flexibleSpace: FlexibleSpaceBar(
+              background: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: const SizedBox(
+                  height: 30,
+                ),
+              ),
+            ),
             automaticallyImplyLeading: false,
-            title: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Bold(text: "Wasafi", size: 20)),
             bottom: (PreferredSize(
                 child: Container(
                   color: const Color.fromARGB(14, 255, 255, 255),
                   height: 1.0,
                 ),
                 preferredSize: const Size.fromHeight(1.0))),
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    CupertinoIcons.bell,
-                    color: Colors.white,
-                    size: 26,
-                  ))
-            ],
           ),
           SliverToBoxAdapter(
             child:
@@ -51,7 +51,7 @@ class Home extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   child: Bold(
                     text: "Stories",
-                    size: 18,
+                    size: 20,
                   )),
               SizedBox(
                 height: 170,
@@ -64,6 +64,40 @@ class Home extends StatelessWidget {
               ),
             ]),
           ),
+          GetBuilder<ProductCategoryController>(builder: (categories) {
+            return SliverToBoxAdapter(
+              child: categories.isLoading
+                  ? SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                          itemCount: 4,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return const CatergoryLoader();
+                          }),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          const TextTile(
+                            title: "Categories",
+                            more: CategoryDetail(),
+                          ),
+                          SizedBox(
+                            height: 145,
+                            child: ListView.builder(
+                                itemCount:
+                                    categories.productCategoryList.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (BuildContext context, index) {
+                                  return CatergoryCard(
+                                      data: categories
+                                          .productCategoryList[index]);
+                                }),
+                          ),
+                        ]),
+            );
+          }),
           GetBuilder<ProductsController>(
             builder: (controllerData) {
               return SliverToBoxAdapter(
@@ -94,6 +128,9 @@ class Home extends StatelessWidget {
           ),
           GetBuilder<ProductsController>(
             builder: (controllerData) {
+              List<dynamic> flashedData = controllerData.productList
+                  .where((element) => element.discount != 0)
+                  .toList();
               return SliverToBoxAdapter(
                 child: controllerData.isLoading
                     ? const ProductLoader()
@@ -101,23 +138,70 @@ class Home extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                             const TextTile(
-                              title: "Trending",
+                              title: "Flash Sales",
                               more: CategoryDetail(),
                             ),
                             SizedBox(
                               height: 230,
                               child: ListView.builder(
-                                  itemCount: controllerData.productList.length,
+                                  itemCount: flashedData.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (BuildContext context, index) {
                                     return ProductCard(
-                                        isFlash: 0,
-                                        data:
-                                            controllerData.productList[index]);
+                                        isFlash: 45, data: flashedData[index]);
                                   }),
                             ),
                           ]),
               );
+            },
+          ),
+          GetBuilder<ProductCategoryController>(
+            builder: (productCategoryData) {
+              return productCategoryData.isLoading
+                  ? const SliverToBoxAdapter(
+                      child: Center(
+                        child: CupertinoActivityIndicator(color: Colors.white),
+                      ),
+                    )
+                  : SliverList(
+                      delegate:
+                          SliverChildBuilderDelegate((context, categoryIndex) {
+                      return GetBuilder<ProductsController>(
+                          builder: (productData) {
+                        var products = productData.productList
+                            .where((element) =>
+                                element.category.id ==
+                                productCategoryData
+                                    .productCategoryList[categoryIndex].id)
+                            .toList();
+                        return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              products.isEmpty
+                                  ? const SizedBox(
+                                      height: 0,
+                                    )
+                                  : TextTile(
+                                      title: productCategoryData
+                                          .productCategoryList[categoryIndex]
+                                          .name,
+                                      more: const CategoryDetail(),
+                                    ),
+                              SizedBox(
+                                height: products.isEmpty ? 0 : 230,
+                                child: ListView.builder(
+                                    itemCount: products.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder:
+                                        (BuildContext context, productIndex) {
+                                      return ProductCard(
+                                          isFlash: 0,
+                                          data: products[productIndex]);
+                                    }),
+                              ),
+                            ]);
+                      });
+                    }, childCount: 5));
             },
           ),
         ],

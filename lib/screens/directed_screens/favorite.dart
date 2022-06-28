@@ -59,6 +59,7 @@ class Favorite extends StatelessWidget {
                                           isOrder: false,
                                           price: "1,000,000",
                                           title: "Iphone 13 Pro Max",
+                                          quantity: 1,
                                           thumbnail:
                                               "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80");
                                     }),

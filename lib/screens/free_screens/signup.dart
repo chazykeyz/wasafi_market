@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/verification.dart';
 import 'package:wasafi_market/main.dart';
-import 'package:wasafi_market/models/sign_up.dart';
-import 'package:wasafi_market/models/verification.dart';
+import 'package:wasafi_market/models/auth/sign_up.dart';
+import 'package:wasafi_market/models/auth/verification.dart';
 import 'package:wasafi_market/screens/free_screens/signin.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
@@ -232,7 +232,7 @@ class SignUp extends StatelessWidget {
                       decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: Colors.white70),
-                          hintText: " Mobile Number"),
+                          hintText: " Mobile Number e.g 07*********"),
                     )),
                 Container(
                     margin:
@@ -302,7 +302,23 @@ class SignUp extends StatelessWidget {
                       text: "Already Have an account? Sign In Now",
                       size: 14,
                       color: Colors.blueAccent),
-                )
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                GestureDetector(
+                    onTap: () {
+                      Get.to(() => const Parent(),
+                          transition: Transition.leftToRightWithFade);
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.white24),
+                      child: const Icon(CupertinoIcons.arrow_left),
+                    ))
               ],
             );
           }),

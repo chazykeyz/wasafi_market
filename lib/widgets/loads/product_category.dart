@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:wasafi_market/controllers/products.dart';
-import 'package:wasafi_market/screens/directed_screens/category.dart';
-import 'package:wasafi_market/widgets/text/regular.dart';
+import 'package:shimmer/shimmer.dart';
 
-class CatergoryCard extends StatelessWidget {
-  const CatergoryCard({Key? key, required this.data}) : super(key: key);
-  final dynamic data;
+class CatergoryLoader extends StatelessWidget {
+  const CatergoryLoader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ProductsController productsController = Get.find<ProductsController>();
-
-    return InkWell(
-      onTap: () {
-        productsController.searchProducts(data.id);
-        Get.to(() => const CategoryDetail(), arguments: data);
-      },
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.white30,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -27,8 +19,6 @@ class CatergoryCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
                   color: const Color.fromARGB(41, 238, 237, 237),
-                  image: DecorationImage(
-                      image: NetworkImage(data.thumbnail), fit: BoxFit.cover),
                 )),
           ),
           Container(
@@ -40,13 +30,6 @@ class CatergoryCard extends StatelessWidget {
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: Colors.white10),
-            child: Center(
-              child: Regular(
-                text: data.name,
-                size: 12,
-                color: Colors.white,
-              ),
-            ),
           )
         ]),
       ),

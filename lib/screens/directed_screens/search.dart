@@ -259,6 +259,7 @@ class _SearchState extends State<Search> {
                                         return const ProductShortCard(
                                             isCart: false,
                                             isOrder: false,
+                                            quantity: 1,
                                             price: "1,000,000",
                                             title: "Iphone 13 Pro Max",
                                             thumbnail:

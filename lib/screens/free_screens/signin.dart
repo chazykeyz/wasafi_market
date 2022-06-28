@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/main.dart';
-import 'package:wasafi_market/models/sign_in.dart';
+import 'package:wasafi_market/models/auth/sign_in.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
@@ -76,7 +76,7 @@ class SignIn extends StatelessWidget {
                   decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.white70),
-                      hintText: " Mobile Number"),
+                      hintText: " Mobile Number e.g 07*********"),
                 )),
             Container(
                 margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
@@ -141,7 +141,23 @@ class SignIn extends StatelessWidget {
                   text: " Have no account Yet? Sign Up Now",
                   size: 14,
                   color: Colors.blueAccent),
-            )
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            GestureDetector(
+                onTap: () {
+                  Get.to(() => const Parent(),
+                      transition: Transition.leftToRightWithFade);
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white24),
+                  child: const Icon(CupertinoIcons.arrow_left),
+                ))
           ],
         );
       }),

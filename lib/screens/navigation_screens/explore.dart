@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wasafi_market/controllers/product_category.dart';
+import 'package:wasafi_market/controllers/products.dart';
+import 'package:wasafi_market/controllers/shop.dart';
 import 'package:wasafi_market/screens/directed_screens/search.dart';
-import 'package:wasafi_market/widgets/avatar.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/seller.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
@@ -13,6 +15,8 @@ class Explore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.find<ShopController>().getShops();
+    Get.find<ProductsController>().trendingProductList();
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -58,79 +62,108 @@ class Explore extends StatelessWidget {
             ]),
           ),
         ),
-        SliverToBoxAdapter(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const ListTile(
-              leading: AvatarCircle(
-                  width: 50,
-                  height: 50,
-                  thumbnail:
-                      "https://images.unsplash.com/photo-1609708993734-29d07306bdc7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"),
-              title: Bold(text: "Women Clothes", size: 16),
-              subtitle: Regular(
-                  text: "Trending Product", size: 14, color: Colors.blueAccent),
-            ),
-            SizedBox(
-              height: 203,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return const ProductCard(isFlash: 0, data: {});
-                  }),
-            ),
-          ]),
+        GetBuilder<ShopController>(
+          builder: (shops) {
+            return SliverToBoxAdapter(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const ListTile(
+                        title: Bold(text: "Seller ", size: 16),
+                        subtitle: Regular(
+                            text: "Trending Seller",
+                            size: 14,
+                            color: Colors.blueAccent),
+                        trailing: Icon(
+                          CupertinoIcons.chevron_right,
+                          color: Colors.blue,
+                          size: 20,
+                        )),
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                          itemCount: shops.shopList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, index) {
+                            return Seller(
+                              data: shops.shopList[index],
+                            );
+                          }),
+                    ),
+                  ]),
+            );
+          },
         ),
-        SliverToBoxAdapter(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const ListTile(
-              leading: AvatarCircle(
-                  width: 50,
-                  height: 50,
-                  thumbnail:
-                      "https://images.unsplash.com/photo-1609708993734-29d07306bdc7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"),
-              title: Bold(text: "Women Clothes", size: 16),
-              subtitle: Regular(
-                  text: "Trending Product", size: 14, color: Colors.blueAccent),
-            ),
-            SizedBox(
-              height: 203,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return const ProductCard(isFlash: 0, data: {});
-                  }),
-            ),
-          ]),
+        GetBuilder<ProductCategoryController>(
+          builder: (productCategoryData) {
+            return productCategoryData.isLoading
+                ? const SliverToBoxAdapter(
+                    child: Center(
+                      child: CupertinoActivityIndicator(color: Colors.white),
+                    ),
+                  )
+                : SliverList(
+                    delegate:
+                        SliverChildBuilderDelegate((context, categoryIndex) {
+                    return GetBuilder<ProductsController>(
+                        builder: (productData) {
+                      var products = productData.trendingList
+                          .where((element) =>
+                              element.category.id ==
+                              productCategoryData
+                                  .productCategoryList[categoryIndex].id)
+                          .toList();
+
+                      return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            products.isEmpty
+                                ? const SizedBox(
+                                    height: 0,
+                                  )
+                                : ListTile(
+                                    leading: Container(
+                                        height: 50,
+                                        width: 50,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: const Color.fromARGB(
+                                                31, 255, 255, 255),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    productCategoryData
+                                                        .productCategoryList[
+                                                            categoryIndex]
+                                                        .thumbnail),
+                                                fit: BoxFit.cover))),
+                                    title: Bold(
+                                        text: productCategoryData
+                                            .productCategoryList[categoryIndex]
+                                            .name,
+                                        size: 16),
+                                    subtitle: const Regular(
+                                        text: "Trending Product",
+                                        size: 14,
+                                        color: Colors.blueAccent),
+                                  ),
+                            SizedBox(
+                              height: products.isEmpty ? 0 : 230,
+                              child: ListView.builder(
+                                  itemCount: products.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder:
+                                      (BuildContext context, productIndex) {
+                                    return ProductCard(
+                                        isFlash: 0,
+                                        data: products[productIndex]);
+                                  }),
+                            ),
+                          ]);
+                    });
+                  }, childCount: 5));
+          },
         ),
-        SliverToBoxAdapter(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            const ListTile(
-                title: Bold(text: "Seller ", size: 16),
-                subtitle: Regular(
-                    text: "Trending Seller",
-                    size: 14,
-                    color: Colors.blueAccent),
-                trailing: Icon(
-                  CupertinoIcons.chevron_right,
-                  color: Colors.blue,
-                  size: 20,
-                )),
-            SizedBox(
-              height: 110,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, index) {
-                    return const Seller();
-                  }),
-            ),
-          ]),
-        )
       ],
     );
   }

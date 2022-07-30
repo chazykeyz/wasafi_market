@@ -7,7 +7,7 @@ class ProductRepo {
   ProductRepo({required this.apiClient});
 
   Future<Response> getProductList() async {
-    return await apiClient.getData(AppConstant.PRODUCTLIST);
+    return await apiClient.getData(AppConstant.PRODUCT_LIST);
   }
 
   Future<Response> searchProductList(category) async {
@@ -17,6 +17,18 @@ class ProductRepo {
   }
 
   Future<Response> trendingProductList() async {
-    return await apiClient.getData(AppConstant.TRENDINGPRODUCTS);
+    return await apiClient.getData(AppConstant.TRENDING_PRODUCTS);
+  }
+
+  Future<Response> fetchProductDetails(id) async {
+    return await apiClient.getData('${AppConstant.PRODUCT_MAIN}/$id');
+  }
+
+  Future<Response> postProduct(productAdd) async {
+    return await apiClient.formDataSend(AppConstant.PRODUCT_MAIN, productAdd);
+  }
+
+  Future<Response> fetchSizes() async {
+    return await apiClient.getData(AppConstant.SIZE_LIST);
   }
 }

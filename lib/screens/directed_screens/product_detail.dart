@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -8,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/cart.dart';
 import 'package:wasafi_market/controllers/user.dart';
+import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/cart/cart.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
+import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
@@ -32,7 +32,12 @@ class _ProductDetailState extends State<ProductDetail> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (!Get.find<AuthController>().logginUser()) {
-        Get.to(() => const SignUp());
+        Get.offAll(() => const SignUp(
+              signDestination: Parent(
+                isFromDetail: true,
+                number: 0,
+              ),
+            ));
       } else {
         Get.find<UserController>().gettingUser();
       }
@@ -71,6 +76,21 @@ class _ProductDetailState extends State<ProductDetail> {
       });
     }
 
+    // delete items
+
+    void deleteItems(id) {
+      CartController cartController = Get.find<CartController>();
+
+      cartController.removeWholeItemFromCart(id).then((status) {
+        if (status.isSuccess) {
+          showCustomSnackBar("Item deleted from cart", title: "Cart");
+          Get.find<UserController>().gettingUser();
+        } else {
+          showCustomSnackBar("deleting cart failed!", title: "Cart");
+        }
+      });
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: GetBuilder<UserController>(builder: (userContent) {
@@ -82,80 +102,30 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               )
             : CustomScrollView(slivers: [
-                SliverAppBar(
-                  backgroundColor: Colors.black,
-                  leading: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Center(
-                        child: Container(
-                            margin: const EdgeInsets.all(5),
-                            width: 47,
-                            height: 47,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(28),
-                                color: Colors.white54),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(28),
-                              child: const Icon(
-                                CupertinoIcons.chevron_back,
-                                color: Colors.black,
-                              ),
-                            )),
-                      )),
-                  actions: [
-                    GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                            margin: const EdgeInsets.all(5),
-                            width: 47,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(28),
-                                color: Colors.white54),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(28),
-                              child: const Icon(
-                                CupertinoIcons.hand_thumbsup,
-                                color: Colors.black,
-                              ),
-                            )))
-                  ],
-                  pinned: true,
-                  floating: true,
-                  expandedHeight: MediaQuery.of(context).size.width + 20,
-                  collapsedHeight: 60,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Swiper(
-                      autoplay: true,
-                      autoplayDelay: 2000,
+                NavHeader(
+                  userContent: userContent,
+                  isPage: false,
+                  title: '',
+                  noCart: true,
+                ),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 300,
+                    child: Swiper(
+                      autoplay: false,
+                      autoplayDelay: 5000,
+                      pagination: const SwiperPagination(
+                        builder: SwiperPagination.dots,
+                      ),
                       loop: true,
                       itemWidth: MediaQuery.of(context).size.width,
                       itemBuilder: (BuildContext context, int index) {
-                        return Stack(children: [
-                          // the blurred image
-                          ClipRRect(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          widget.data.thumbnail[index]),
-                                      fit: BoxFit.cover)),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-                                child: Container(),
-                              ),
-                            ),
+                        return Center(
+                          child: Image.network(
+                            widget.data.thumbnail[index],
+                            fit: BoxFit.fill,
                           ),
-                          // the visible image
-                          Center(
-                            child: Image.network(
-                              widget.data.thumbnail[index],
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          // gradient colors
-                        ]);
+                        );
                       },
                       itemCount: widget.data.thumbnail.length,
                     ),
@@ -414,13 +384,13 @@ class _ProductDetailState extends State<ProductDetail> {
                                       color: Colors.black,
                                       text: userContent.userList[0].cart
                                                   .where((item) =>
-                                                      item.product ==
+                                                      item.product.id ==
                                                       widget.data.id)
                                                   .length !=
                                               0
                                           ? userContent.userList[0].cart
                                               .firstWhere((item) =>
-                                                  item.product ==
+                                                  item.product.id ==
                                                   widget.data.id)
                                               .quantity
                                               .toString()
@@ -454,7 +424,18 @@ class _ProductDetailState extends State<ProductDetail> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                addToCart(widget.data);
+                                userContent.userList[0].cart
+                                            .where((item) =>
+                                                item.product.id ==
+                                                widget.data.id)
+                                            .length ==
+                                        0
+                                    ? addToCart(widget.data)
+                                    : deleteItems(userContent.userList[0].cart
+                                        .firstWhere((item) =>
+                                            item.product.id == widget.data.id)
+                                        .product
+                                        .id);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(4),
@@ -464,11 +445,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                 decoration: BoxDecoration(
                                     color: userContent.userList[0].cart
                                                 .where((item) =>
-                                                    item.product ==
+                                                    item.product.id ==
                                                     widget.data.id)
                                                 .length !=
                                             0
-                                        ? Colors.white
+                                        ? Colors.red
                                         : Colors.blue,
                                     borderRadius: BorderRadius.circular(15)),
                                 child: Center(
@@ -476,7 +457,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     color: Colors.black,
                                     text: userContent.userList[0].cart
                                                 .where((item) =>
-                                                    item.product ==
+                                                    item.product.id ==
                                                     widget.data.id)
                                                 .length !=
                                             0

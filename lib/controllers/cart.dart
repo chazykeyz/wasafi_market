@@ -32,6 +32,8 @@ class CartController extends GetxController implements GetxService {
 
   // remove from cart
   Future<ResponseModel> cartItemRemove(id) async {
+    _isLoading = true;
+    update();
     Response response = await cartRepo.cartItemRemove(id);
 
     late ResponseModel responseModel;
@@ -40,6 +42,42 @@ class CartController extends GetxController implements GetxService {
       responseModel = ResponseModel(true, "item removed");
     } else {
       responseModel = ResponseModel(false, "item failed to be removed");
+    }
+    _isLoading = false;
+    update();
+
+    return responseModel;
+  }
+
+  // remove whole item from cart
+  Future<ResponseModel> removeWholeItemFromCart(id) async {
+    _isLoading = true;
+    update();
+    Response response = await cartRepo.removeWholeItemFromCart(id);
+    late ResponseModel responseModel;
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "item removed");
+    } else {
+      responseModel = ResponseModel(false, "item failed to be removed");
+    }
+    _isLoading = false;
+    update();
+
+    return responseModel;
+  }
+
+  // remove whole item from cart
+  Future<ResponseModel> deleteCart() async {
+    _isLoading = true;
+    update();
+    Response response = await cartRepo.deleteCart();
+    late ResponseModel responseModel;
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "cart deleted");
+    } else {
+      responseModel = ResponseModel(false, "cart failed to be deleted");
     }
     _isLoading = false;
     update();

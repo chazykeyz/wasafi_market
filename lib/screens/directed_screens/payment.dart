@@ -22,7 +22,10 @@ class Payment extends StatelessWidget {
             title: Row(children: [
               GestureDetector(
                   onTap: () {
-                    Get.offAll(const Parent());
+                    Get.offAll(const Parent(
+                      isFromDetail: false,
+                      number: 1,
+                    ));
                   },
                   child: Center(
                     child: Container(

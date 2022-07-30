@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
-import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/auth/sign_in.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
@@ -10,7 +9,8 @@ import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class SignIn extends StatelessWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({Key? key, required this.destination}) : super(key: key);
+  final Widget destination;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class SignIn extends StatelessWidget {
           if (status.isSuccess) {
             String name = authController.user;
             showCustomSnackBar("Welcome $name!", title: "Login Successful");
-            Get.to(() => const Parent());
+            Get.offAll(() => destination);
           } else {
             showCustomSnackBar("Login failed! try again!", title: "Login");
           }
@@ -72,6 +72,8 @@ class SignIn extends StatelessWidget {
                     color: Colors.white12),
                 child: TextField(
                   controller: phoneController,
+                  keyboardType: TextInputType.phone,
+                  keyboardAppearance: Brightness.dark,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -91,6 +93,7 @@ class SignIn extends StatelessWidget {
                   controller: passwordController,
                   obscureText: true,
                   obscuringCharacter: "*",
+                  keyboardAppearance: Brightness.dark,
                   style: const TextStyle(color: Colors.white),
                   decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -135,7 +138,11 @@ class SignIn extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(() => const SignUp(), transition: Transition.zoom);
+                Get.to(
+                    () => SignUp(
+                          signDestination: destination,
+                        ),
+                    transition: Transition.zoom);
               },
               child: const Regular(
                   text: " Have no account Yet? Sign Up Now",
@@ -147,7 +154,7 @@ class SignIn extends StatelessWidget {
             ),
             GestureDetector(
                 onTap: () {
-                  Get.to(() => const Parent(),
+                  Get.to(() => destination,
                       transition: Transition.leftToRightWithFade);
                 },
                 child: Container(

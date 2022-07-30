@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/user.dart';
@@ -32,19 +33,27 @@ class MyApp extends StatelessWidget {
     Get.find<UserController>().gettingUser();
 
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Wasafi Mall',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Parent(),
+      home: const Parent(
+        isFromDetail: false,
+        number: 0,
+      ),
     );
   }
 }
 
 class Parent extends StatefulWidget {
-  const Parent({Key? key}) : super(key: key);
-
+  const Parent({
+    Key? key,
+    required this.isFromDetail,
+    required this.number,
+  }) : super(key: key);
+  final bool isFromDetail;
+  final int number;
   @override
   State<Parent> createState() => _ParentState();
 }
@@ -55,6 +64,20 @@ class _ParentState extends State<Parent> {
   void navigationChange(int index) {
     setState(() {
       selectedItem = index;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (widget.isFromDetail == true) {
+        navigationChange(widget.number);
+      }
+      // auth check to get the user data initially
+      if (Get.find<AuthController>().logginUser()) {
+        Get.find<UserController>().gettingUser();
+      }
     });
   }
 
@@ -119,10 +142,13 @@ class _ParentState extends State<Parent> {
                           backgroundColor: Colors.black.withOpacity(.6),
                           icon: SizedBox(
                             width: 40,
+                            height: 20,
                             child: Stack(children: [
-                              const Icon(CupertinoIcons.cart),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 8),
+                                  child: const Icon(CupertinoIcons.bag)),
                               Positioned(
-                                  left: 14,
+                                  left: 15,
                                   child: Container(
                                     padding: const EdgeInsets.all(2),
                                     constraints: const BoxConstraints(
@@ -143,7 +169,7 @@ class _ParentState extends State<Parent> {
                                   ))
                             ]),
                           ),
-                          activeIcon: const Icon(CupertinoIcons.cart_fill),
+                          activeIcon: const Icon(CupertinoIcons.bag_fill),
                           label: "Cart",
                         ),
                         BottomNavigationBarItem(

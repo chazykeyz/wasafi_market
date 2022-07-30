@@ -10,15 +10,15 @@ class UserRepo {
   UserRepo({required this.apiClient, required this.sharedPreferences});
 
   Future<Response> gettingUsers() async {
-    return await apiClient.getData(AppConstant.SINGLEUSER);
+    return await apiClient.getData(AppConstant.SINGLE_USER);
   }
 
   Future<Response> updatingUser(UsernameChange usernameChange) async {
     return await apiClient.updateData(
-        AppConstant.SINGLEUPDATEUSER, usernameChange.toJson());
+        AppConstant.SINGLE_UPDATE_USER, usernameChange.toJson());
   }
 
   Future<Response> readNotification() async {
-    return await apiClient.postData(AppConstant.READNOTIFICATION, "");
+    return await apiClient.postData(AppConstant.READ_NOTIFICATION, "");
   }
 }

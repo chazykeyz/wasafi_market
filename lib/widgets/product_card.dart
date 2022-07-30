@@ -15,9 +15,6 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int discountPercent = int.parse(
-        ((data.discount / data.price) * 100.round()).toStringAsFixed(0));
-
     return InkWell(
       onTap: () {
         Get.to(() => ProductDetail(
@@ -67,7 +64,8 @@ class ProductCard extends StatelessWidget {
                                 color: Colors.red),
                             child: Center(
                                 child: Regular(
-                                    text: "$discountPercent%",
+                                    text:
+                                        "${int.parse(((data.discount / data.price) * 100.round()).toStringAsFixed(0))}%",
                                     size: 14,
                                     color: Colors.white)),
                           ),

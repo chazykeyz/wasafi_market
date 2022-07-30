@@ -9,11 +9,13 @@ class ShopController extends GetxController implements GetxService {
   ShopController({required this.shopRepo});
 
   bool _isLoading = false;
+  bool _subLoading = false;
   List<dynamic> _shopList = [];
   List<dynamic> _shopCategoryList = [];
   List<dynamic> shopDetails = [];
 
   bool get isloading => _isLoading;
+  bool get subLoading => _subLoading;
   List<dynamic> get shopList => _shopList;
   List<dynamic> get shopCategoryList => _shopCategoryList;
 
@@ -56,7 +58,6 @@ class ShopController extends GetxController implements GetxService {
   // getting the shop deatil
   Future<void> getShop(id) async {
     shopDetails = [];
-
     Response response = await shopRepo.getShop(id);
     if (response.statusCode == 200) {
       shopDetails = [];
@@ -66,6 +67,20 @@ class ShopController extends GetxController implements GetxService {
     } else {
       shopDetails = [];
       _isLoading = false;
+      update();
+    }
+  }
+
+  // subscribe
+  Future<void> subscribeShop(id) async {
+    _subLoading = true;
+    update();
+    Response response = await shopRepo.subscribeShop(id);
+    if (response.statusCode == 200) {
+      _subLoading = false;
+      update();
+    } else {
+      _subLoading = false;
       update();
     }
   }

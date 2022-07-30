@@ -15,13 +15,12 @@ class ApiClient extends GetConnect implements GetxService {
   }) {
     baseUrl = appBaseUrl;
     timeout = const Duration(seconds: 30);
-    token = (sharedPreferences.getString(AppConstant.TOKEN) ?? "dfgf");
+    token = (sharedPreferences.getString(AppConstant.TOKEN) ?? "");
     _mainHeaders = {"Content-Type": "application/json", "auth-token": token};
   }
 
   // update header
   void updateHeader(String token) {
-    print(token);
     _mainHeaders = {"Content-Type": "application/json", "auth-token": token};
   }
 
@@ -32,7 +31,7 @@ class ApiClient extends GetConnect implements GetxService {
     };
 
     Response response =
-        await post(AppConstant.GETREFRESHTOKEN, body, headers: _mainHeaders);
+        await post(AppConstant.GET_REFRESH_TOKEN, body, headers: _mainHeaders);
 
     if (response.statusCode == 200) {
       updateHeader(response.body["accessToken"]);
@@ -51,7 +50,7 @@ class ApiClient extends GetConnect implements GetxService {
 // checking token expeiration
   Future<bool> checkingExpiration() async {
     Response response =
-        await post(AppConstant.EXPIRATIONCHECK, "", headers: _mainHeaders);
+        await post(AppConstant.EXPIRATION_CHECK, "", headers: _mainHeaders);
 
     if (response.statusCode == 200) {
       return true;
@@ -79,7 +78,6 @@ class ApiClient extends GetConnect implements GetxService {
 
 //  putting data function
   Future<Response> postData(String uri, dynamic body) async {
-    print(sharedPreferences.getString(AppConstant.TOKEN));
     if (token != "") {
       checkingExpiration().then((value) {
         if (value == false) {
@@ -125,6 +123,26 @@ class ApiClient extends GetConnect implements GetxService {
     try {
       Response response = await patch(uri, body, headers: _mainHeaders);
 
+      return response;
+    } catch (e) {
+      return Response(statusCode: 1, statusText: e.toString());
+    }
+  }
+
+  // the formdata puting
+  Future<Response> formDataSend(String uri, dynamic body) async {
+    var _headers = {"auth-token": token};
+    if (token != "") {
+      checkingExpiration().then((value) {
+        if (value == false) {
+          refreshToken();
+        }
+      });
+    }
+
+    try {
+      Response response = await post(uri, body,
+          contentType: "multipart/form-data", headers: _headers);
       return response;
     } catch (e) {
       return Response(statusCode: 1, statusText: e.toString());

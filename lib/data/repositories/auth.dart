@@ -19,7 +19,7 @@ class AuthRepo {
 
 // login
   Future<Response> login(SignInBody signInBody) async {
-    return await apiClient.postData(AppConstant.SIGNIN, signInBody.toJson());
+    return await apiClient.postData(AppConstant.SIGN_IN, signInBody.toJson());
   }
 
   // checking token
@@ -58,6 +58,6 @@ class AuthRepo {
   // changing password
   Future<Response> changingPassword(PasswordChange passwordChange) {
     return apiClient.postData(
-        AppConstant.PASSWORDCHANGE, passwordChange.toJson());
+        AppConstant.PASSWORD_CHANGE, passwordChange.toJson());
   }
 }

@@ -80,7 +80,7 @@ class AuthController extends GetxController implements GetxService {
     return token;
   }
 
-  bool clearedSharedData() {
+  bool logginOut() {
     return authRepo.clearedSharedData();
   }
 }

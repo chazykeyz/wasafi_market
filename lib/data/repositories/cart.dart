@@ -24,4 +24,8 @@ class CartRepo {
     var url = AppConstant.REMOVE_WHOLE_ITEM_FROM_CART;
     return await apiClient.postData('$url/$id', '');
   }
+
+  Future<Response> deleteCart() async {
+    return await apiClient.postData(AppConstant.DELETE_CART, '');
+  }
 }

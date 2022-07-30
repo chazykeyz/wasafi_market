@@ -11,9 +11,9 @@ class Products {
     required this.products,
   });
 
-  int page;
-  int count;
-  List<ProductsProduct> products;
+  final int page;
+  final int count;
+  final List<ProductsProduct> products;
 
   factory Products.fromJson(Map<String, dynamic> json) => Products(
         page: json["page"],
@@ -31,7 +31,6 @@ class Products {
 
 class ProductsProduct {
   ProductsProduct({
-    required this.rateValue,
     required this.id,
     required this.name,
     required this.category,
@@ -49,30 +48,30 @@ class ProductsProduct {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.rateValue,
   });
 
-  int rateValue;
-  String id;
-  String name;
-  Category category;
-  SubCategory subCategory;
-  Seller seller;
-  List<String> thumbnail;
-  int price;
-  int stockCount;
-  int remainedStock;
-  bool isAvailable;
-  List<dynamic> size;
-  List<String> color;
-  int discount;
-  String description;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int v;
+  final String id;
+  final String name;
+  final Category category;
+  final SubCategory subCategory;
+  final Seller seller;
+  final List<String> thumbnail;
+  final int price;
+  final int stockCount;
+  final int remainedStock;
+  final bool isAvailable;
+  final List<dynamic> size;
+  final List<String> color;
+  final int discount;
+  final String description;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
+  final int rateValue;
 
   factory ProductsProduct.fromJson(Map<String, dynamic> json) =>
       ProductsProduct(
-        rateValue: json["rate_value"],
         id: json["_id"],
         name: json["name"],
         category: Category.fromJson(json["category"]),
@@ -90,10 +89,10 @@ class ProductsProduct {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
+        rateValue: json["rate_value"],
       );
 
   Map<String, dynamic> toJson() => {
-        "rate_value": rateValue,
         "_id": id,
         "name": name,
         "category": category.toJson(),
@@ -111,6 +110,7 @@ class ProductsProduct {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
+        "rate_value": rateValue,
       };
 }
 
@@ -123,11 +123,11 @@ class Category {
     required this.thumbnail,
   });
 
-  String id;
-  String name;
-  List<String> subCategories;
-  int v;
-  String thumbnail;
+  final String id;
+  final String name;
+  final List<String> subCategories;
+  final int v;
+  final String thumbnail;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["_id"],
@@ -167,23 +167,23 @@ class Seller {
     required this.v,
   });
 
-  String bio;
-  String link;
-  String id;
-  User user;
-  String shopLocation;
-  List<String> followers;
-  String shopName;
-  bool isVerified;
-  String profilePicture;
-  List<dynamic> shopThumbnails;
-  String shopCategory;
-  int income;
-  int rateValue;
-  List<dynamic> orders;
-  List<SellerProduct> products;
-  bool isActive;
-  int v;
+  final String bio;
+  final String link;
+  final String id;
+  final User user;
+  final String shopLocation;
+  final List<String> followers;
+  final String shopName;
+  final bool isVerified;
+  final String profilePicture;
+  final List<dynamic> shopThumbnails;
+  final String shopCategory;
+  final int income;
+  final int rateValue;
+  final List<dynamic> orders;
+  final List<SellerProduct> products;
+  final bool isActive;
+  final int v;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
         bio: json["bio"],
@@ -230,7 +230,6 @@ class Seller {
 
 class SellerProduct {
   SellerProduct({
-    required this.rateValue,
     required this.id,
     required this.name,
     required this.category,
@@ -248,29 +247,29 @@ class SellerProduct {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.rateValue,
   });
 
-  int rateValue;
-  String id;
-  String name;
-  String category;
-  String subCategory;
-  String seller;
-  List<String> thumbnail;
-  int price;
-  int stockCount;
-  int remainedStock;
-  bool isAvailable;
-  List<dynamic> size;
-  List<String> color;
-  int discount;
-  String description;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int v;
+  final String id;
+  final String name;
+  final String category;
+  final String subCategory;
+  final String seller;
+  final List<String> thumbnail;
+  final int price;
+  final int stockCount;
+  final int remainedStock;
+  final bool isAvailable;
+  final List<dynamic> size;
+  final List<String> color;
+  final int discount;
+  final String description;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
+  final int rateValue;
 
   factory SellerProduct.fromJson(Map<String, dynamic> json) => SellerProduct(
-        rateValue: json["rate_value"],
         id: json["_id"],
         name: json["name"],
         category: json["category"],
@@ -288,10 +287,10 @@ class SellerProduct {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
+        rateValue: json["rate_value"],
       );
 
   Map<String, dynamic> toJson() => {
-        "rate_value": rateValue,
         "_id": id,
         "name": name,
         "category": category,
@@ -309,6 +308,7 @@ class SellerProduct {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
+        "rate_value": rateValue,
       };
 }
 
@@ -326,20 +326,28 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.cart,
+    required this.notification,
+    required this.wallet,
+    required this.order,
   });
 
-  String id;
-  String username;
-  int mobileNumber;
-  String password;
-  bool isActive;
-  bool isFullRegistered;
-  List<dynamic> searches;
-  List<dynamic> favorite;
-  List<dynamic> subscriptions;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int v;
+  final String id;
+  final String username;
+  final int mobileNumber;
+  final String password;
+  final bool isActive;
+  final bool isFullRegistered;
+  final List<dynamic> searches;
+  final List<dynamic> favorite;
+  final List<dynamic> subscriptions;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
+  final List<Cart> cart;
+  final List<String> notification;
+  final int wallet;
+  final List<dynamic> order;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["_id"],
@@ -354,6 +362,10 @@ class User {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
+        cart: List<Cart>.from(json["cart"].map((x) => Cart.fromJson(x))),
+        notification: List<String>.from(json["notification"].map((x) => x)),
+        wallet: json["wallet"],
+        order: List<dynamic>.from(json["order"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -369,6 +381,34 @@ class User {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
+        "cart": List<dynamic>.from(cart.map((x) => x.toJson())),
+        "notification": List<dynamic>.from(notification.map((x) => x)),
+        "wallet": wallet,
+        "order": List<dynamic>.from(order.map((x) => x)),
+      };
+}
+
+class Cart {
+  Cart({
+    required this.product,
+    required this.quantity,
+    required this.id,
+  });
+
+  final String product;
+  final int quantity;
+  final String id;
+
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+        product: json["product"],
+        quantity: json["quantity"],
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product": product,
+        "quantity": quantity,
+        "_id": id,
       };
 }
 
@@ -379,9 +419,9 @@ class SubCategory {
     required this.v,
   });
 
-  String id;
-  String name;
-  int v;
+  final String id;
+  final String name;
+  final int v;
 
   factory SubCategory.fromJson(Map<String, dynamic> json) => SubCategory(
         id: json["_id"],

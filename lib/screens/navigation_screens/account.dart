@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/user.dart';
+import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/auth/password.dart';
 import 'package:wasafi_market/models/user/username.dart';
+import 'package:wasafi_market/screens/directed_screens/add_product.dart';
 import 'package:wasafi_market/screens/directed_screens/favorite.dart';
 import 'package:wasafi_market/screens/navigation_screens/notification.dart';
-import 'package:wasafi_market/screens/directed_screens/order.dart';
 import 'package:wasafi_market/screens/directed_screens/subscription.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
-import 'package:wasafi_market/widgets/order_card.dart';
+import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -30,7 +31,9 @@ class _AccountState extends State<Account> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (!Get.find<AuthController>().logginUser()) {
-        Get.to(() => const SignUp());
+        Get.offAll(() => const SignUp(
+              signDestination: Parent(isFromDetail: true, number: 4),
+            ));
       } else {
         Get.find<UserController>().gettingUser();
       }
@@ -108,9 +111,9 @@ class _AccountState extends State<Account> {
                     child: Container(
                         padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.only(top: 100),
-                        decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(.1),
-                            borderRadius: const BorderRadius.only(
+                        decoration: const BoxDecoration(
+                            color: Colors.white12,
+                            borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 topRight: Radius.circular(30))),
                         width: MediaQuery.of(context).size.width,
@@ -369,12 +372,11 @@ class _AccountState extends State<Account> {
             )
           : CustomScrollView(
               slivers: [
-                const SliverAppBar(
-                  centerTitle: false,
-                  pinned: true,
-                  backgroundColor: Colors.black,
-                  automaticallyImplyLeading: false,
-                  title: Bold(text: "Account", size: 24),
+                NavHeader(
+                  userContent: userData,
+                  isPage: true,
+                  title: 'Account',
+                  noCart: false,
                 ),
                 SliverToBoxAdapter(
                   child: Container(
@@ -454,414 +456,623 @@ class _AccountState extends State<Account> {
                         ]),
                   ),
                 ),
+                // the shop setup group
                 SliverToBoxAdapter(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              left: 10, right: 10, top: 10, bottom: 2),
-                          child: Bold(text: " Wallet Balance", size: 22),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        width: MediaQuery.of(context).size.width,
+                        child: const Regular(
+                          text: "SHOP SETUP",
+                          size: 14,
+                          color: Colors.white,
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 2, bottom: 10),
-                          decoration: const BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      width: 1, color: Colors.white12))),
-                          child: Container(
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 0),
+                        decoration: BoxDecoration(
+                          color: Colors.white10,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
                               padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white12),
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: Colors.white12),
-                              child: ListTile(
-                                title: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.creditcard,
-                                      color: Colors.blue,
-                                      size: 24,
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: Colors.white12),
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.info,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Shop Bio",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "Total Wallet Balance, ",
-                                        size: 15,
-                                        color: Colors.white70,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                subtitle: Bold(
-                                  size: 25,
-                                  text: userData.userList[0].wallet.toString(),
-                                ),
-                              )),
-                        ),
-                      ]),
-                ),
-                SliverToBoxAdapter(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
-                                  child: Bold(
-                                    text: "Orders",
-                                    size: 16,
-                                  )),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => const Orders());
-                                },
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Regular(
-                                      text: "View All ",
-                                      color: Colors.blue,
-                                      size: 14,
-                                    ),
-                                    Icon(
-                                      CupertinoIcons.chevron_right,
-                                      color: Colors.blue,
-                                      size: 20,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 120,
-                          child: ListView.builder(
-                              itemCount: 6,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (BuildContext context, index) {
-                                return const OrderCard(
-                                  price: '500,000',
-                                  thumbnail:
-                                      "https://images.unsplash.com/photo-1649798511342-b468e770c222?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-                                  title: 'dfjskfhi5b',
-                                );
-                              }),
-                        ),
-                      ]),
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.white12),
-                                top: BorderSide(color: Colors.white12)),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.bell,
-                                      color: Colors.blue,
-                                      size: 24,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "Notification ",
-                                        size: 15,
-                                        color: Colors.white70,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const Notifications(),
-                                        arguments:
-                                            userData.userList[0].notification);
-                                  },
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      userData.userList[0].notification
-                                                  .where((element) =>
-                                                      element.isRead == false)
-                                                  .length !=
-                                              0
-                                          ? Container(
-                                              constraints: const BoxConstraints(
-                                                  minWidth: 30, minHeight: 30),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              child: Center(
-                                                child: Regular(
-                                                    text: userData.userList[0]
-                                                        .notification
-                                                        .where((element) =>
-                                                            element.isRead ==
-                                                            false)
-                                                        .length
-                                                        .toString(),
-                                                    size: 16,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          : const SizedBox(
-                                              height: 0,
-                                            ),
-                                      const Icon(
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Subscription());
+                                      },
+                                      child: const Icon(
                                         CupertinoIcons.chevron_right,
-                                        color: Colors.blue,
-                                        size: 24,
+                                        color: Colors.white54,
+                                        size: 20,
                                       ),
-                                    ],
-                                  ),
-                                )
-                              ]),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.white12),
+                                    )
+                                  ]),
                             ),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.hand_thumbsup,
-                                      color: Colors.blue,
-                                      size: 24,
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: Colors.white12),
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.creditcard,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Payments ",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "Wish List ",
-                                        size: 15,
-                                        color: Colors.white70,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Notifications(),
+                                            arguments: userData
+                                                .userList[0].notification);
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.chevron_right,
+                                        color: Colors.white54,
+                                        size: 20,
                                       ),
                                     )
-                                  ],
+                                  ]),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: Colors.white12),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const Favorite());
-                                  },
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.link,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Website",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Favorite());
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.chevron_right,
+                                        color: Colors.white54,
+                                        size: 20,
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.pin,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Location",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Subscription());
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.chevron_right,
+                                        color: Colors.white54,
+                                        size: 20,
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
+                  ),
+                ),
+                // shop
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        width: MediaQuery.of(context).size.width,
+                        child: const Regular(
+                          text: "SHOP INFO",
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white10,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const Favorite());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(color: Colors.white12),
+                                  ),
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Regular(
-                                        text: userData
-                                            .userList[0].favorite.length
-                                            .toString(),
-                                        size: 16,
-                                        color: Colors.white,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.hand_thumbsup,
+                                            color: Colors.blue,
+                                            size: 24,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Customers",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      const Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.blue,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ]),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.white12)),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.person_2,
-                                      color: Colors.blue,
-                                      size: 24,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "Subscriptions ",
-                                        size: 15,
-                                        color: Colors.white70,
-                                      ),
-                                    )
-                                  ],
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => const Favorite());
+                                        },
+                                        child: const Icon(
+                                          CupertinoIcons.chevron_right,
+                                          color: Colors.white60,
+                                          size: 20,
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const Favorite());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Colors.white12)),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const Subscription());
-                                  },
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Regular(
-                                        text: userData
-                                            .userList[0].subscriptions.length
-                                            .toString(),
-                                        size: 16,
-                                        color: Colors.white,
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.time,
+                                            color: Colors.blue,
+                                            size: 24,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Shop Orders",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                      const Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.blue,
-                                        size: 24,
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => const Favorite());
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: const [
+                                            Icon(
+                                              CupertinoIcons.chevron_right,
+                                              color: Colors.white60,
+                                              size: 20,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const ProductManagement(),
+                                    arguments: userData.userList[0].id);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.info,
+                                            color: Colors.blue,
+                                            size: 24,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Product Management ",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )
-                              ]),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.chevron_right,
+                                            color: Colors.white60,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      )
+                                    ]),
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.white12)),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.time,
-                                      color: Colors.blue,
-                                      size: 24,
+                      ),
+                    ]),
+                  ),
+                ),
+
+                // main setup group
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        width: MediaQuery.of(context).size.width,
+                        child: const Regular(
+                          text: "ACCOUNT INFO",
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white10,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(color: Colors.white12),
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.hand_thumbsup,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Wish List ",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "History",
-                                        size: 15,
-                                        color: Colors.white70,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Favorite());
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.chevron_right,
+                                        color: Colors.white60,
+                                        size: 20,
                                       ),
                                     )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const Favorite());
-                                  },
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.blue,
-                                        size: 24,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ]),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: Colors.white12)),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 2),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const [
-                                    Icon(
-                                      CupertinoIcons.info,
-                                      color: Colors.blue,
-                                      size: 24,
+                                  ]),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.white12)),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.person_2,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Subscriptions ",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: Regular(
-                                        text: "Received Orders ",
-                                        size: 15,
-                                        color: Colors.white70,
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Subscription());
+                                      },
+                                      child: const Icon(
+                                        CupertinoIcons.chevron_right,
+                                        color: Colors.white60,
+                                        size: 20,
                                       ),
                                     )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const Favorite());
-                                  },
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: const [
-                                      Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.blue,
-                                        size: 24,
+                                  ]),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.white12)),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.time,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "History",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Favorite());
+                                      },
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.chevron_right,
+                                            color: Colors.white60,
+                                            size: 20,
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )
-                              ]),
+                                    )
+                                  ]),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 2),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          CupertinoIcons.info,
+                                          color: Colors.blue,
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                            text: "Sent Orders ",
+                                            size: 15,
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const Favorite());
+                                      },
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.chevron_right,
+                                            color: Colors.white60,
+                                            size: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                          ],
                         ),
-                        Container(
+                      ),
+                    ]),
+                  ),
+                ),
+                // log out button
+                GetBuilder<AuthController>(builder: (authContent) {
+                  return SliverToBoxAdapter(
+                    child: Column(children: [
+                      InkWell(
+                        onTap: () {
+                          authContent.logginOut();
+                          userData.userList.clear();
+                          Get.offAll(() =>
+                              const Parent(isFromDetail: true, number: 0));
+                        },
+                        child: Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           padding: const EdgeInsets.symmetric(horizontal: 60),
                           height: 44,
                           decoration: BoxDecoration(
-                              border:
-                                  Border.all(width: 1, color: Colors.white12),
-                              color: const Color.fromARGB(55, 68, 137, 255),
+                              color: Colors.blue,
                               borderRadius: BorderRadius.circular(16)),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -873,10 +1084,13 @@ class _AccountState extends State<Account> {
                                 ),
                               ]),
                         ),
-                      ],
-                    ),
-                  ),
-                )
+                      ),
+                      const SizedBox(
+                        height: 100,
+                      )
+                    ]),
+                  );
+                })
               ],
             );
     });

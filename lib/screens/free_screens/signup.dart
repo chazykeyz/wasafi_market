@@ -12,7 +12,8 @@ import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class SignUp extends StatelessWidget {
-  const SignUp({Key? key}) : super(key: key);
+  const SignUp({Key? key, required this.signDestination}) : super(key: key);
+  final Widget signDestination;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class SignUp extends StatelessWidget {
                         .verification(verificationController)
                         .then((status) {
                       if (status.isSuccess) {
-                        Get.to(() => const Parent());
+                        Get.offAll(() => signDestination);
                         showCustomSnackBar("Registration successfull!",
                             title: "Registration");
                       } else {
@@ -143,6 +144,7 @@ class SignUp extends StatelessWidget {
                                         }
                                       },
                                       controller: codeController,
+                                      keyboardType: TextInputType.number,
                                       maxLength: 4,
                                       style:
                                           const TextStyle(color: Colors.white),
@@ -208,6 +210,7 @@ class SignUp extends StatelessWidget {
                         border: Border.all(width: 1, color: Colors.white30),
                         color: Colors.white12),
                     child: TextField(
+                      keyboardAppearance: Brightness.dark,
                       controller: usernameController,
                       autocorrect: false,
                       style: const TextStyle(color: Colors.white),
@@ -227,7 +230,9 @@ class SignUp extends StatelessWidget {
                         border: Border.all(width: 1, color: Colors.white30),
                         color: Colors.white12),
                     child: TextField(
+                      keyboardAppearance: Brightness.dark,
                       controller: phoneController,
+                      keyboardType: TextInputType.phone,
                       style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                           border: InputBorder.none,
@@ -245,6 +250,7 @@ class SignUp extends StatelessWidget {
                         border: Border.all(width: 1, color: Colors.white30),
                         color: Colors.white12),
                     child: TextField(
+                      keyboardAppearance: Brightness.dark,
                       controller: passwordController,
                       style: const TextStyle(color: Colors.white),
                       obscureText: true,
@@ -296,7 +302,11 @@ class SignUp extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const SignIn(), transition: Transition.zoom);
+                    Get.to(
+                        () => SignIn(
+                              destination: signDestination,
+                            ),
+                        transition: Transition.zoom);
                   },
                   child: const Regular(
                       text: "Already Have an account? Sign In Now",
@@ -308,7 +318,11 @@ class SignUp extends StatelessWidget {
                 ),
                 GestureDetector(
                     onTap: () {
-                      Get.to(() => const Parent(),
+                      Get.to(
+                          () => const Parent(
+                                isFromDetail: false,
+                                number: 1,
+                              ),
                           transition: Transition.leftToRightWithFade);
                     },
                     child: Container(

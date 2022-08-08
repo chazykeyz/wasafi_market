@@ -41,11 +41,11 @@ class AuthController extends GetxController implements GetxService {
     Response response = await authRepo.login(signInBody);
 
     if (response.statusCode == 200) {
-      authRepo.saveUserToken(
-          response.body["accessToken"], response.body["refreshToken"]);
+      authRepo.saveAccessToken(response.body["accessToken"]);
+      authRepo.saveRefreshToken(response.body["refreshToken"]);
       _user = response.body['User']['username'];
       update();
-      responseModel = ResponseModel(true, response.body["accessToken"]);
+      responseModel = ResponseModel(true, "logged in");
     } else {
       responseModel = ResponseModel(false, response.statusText!);
     }

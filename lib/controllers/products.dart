@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:wasafi_market/data/repositories/products.dart';
 import 'package:wasafi_market/models/products/add_product.dart';
+import 'package:wasafi_market/models/products/edit_product.dart';
 import 'package:wasafi_market/models/products/product_single.dart';
 import 'package:wasafi_market/models/products/products.dart';
 import 'package:wasafi_market/models/products/size.dart';
@@ -95,17 +96,21 @@ class ProductsController extends GetxController implements GetxService {
     Response response = await productRepo.fetchSizes();
 
     if (response.statusCode == 200) {
-      _sizeList = [].obs;
+      _sizeList = [];
       for (var item in response.body) {
         _sizeList.add(Sizes.fromJson(item));
       }
+      update();
     } else {
-      _sizeList = [].obs;
+      _sizeList = [];
+      update();
     }
   }
 
 // posting products
   Future<ResponseModel> postProducts(ProductAdd productAdd) async {
+    _isLoading = true;
+    update();
     List<MultipartFile> _document = [];
     Map<String, Object> _formBody = {};
 // image
@@ -144,9 +149,52 @@ class ProductsController extends GetxController implements GetxService {
 
     if (response.statusCode == 200) {
       responseModel = ResponseModel(true, "Product posted successfully!");
+      _isLoading = false;
+      update();
     } else {
       responseModel = ResponseModel(false, "Product post failed!");
+      _isLoading = false;
+      update();
     }
+    return responseModel;
+  }
+
+// editing products
+  Future<ResponseModel> editProduct(ProductEdit productEdit, id) async {
+    _isLoading = true;
+    update();
+    Response response = await productRepo.editProduct(productEdit, id);
+    late ResponseModel responseModel;
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "product successful edited");
+      _isLoading = false;
+      update();
+    } else {
+      responseModel = ResponseModel(false, 'product editing failed!');
+      _isLoading = false;
+      update();
+    }
+    return responseModel;
+  }
+
+  // deleting product
+  Future<ResponseModel> deletingProduct(id) async {
+    _isLoading = true;
+    update();
+    late ResponseModel responseModel;
+    Response response = await productRepo.deletingProduct(id);
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "Product successFull Deleted");
+      _isLoading = false;
+      update();
+    } else {
+      responseModel = ResponseModel(false, "Product Delete failed");
+      _isLoading = false;
+      update();
+    }
+
     return responseModel;
   }
 }

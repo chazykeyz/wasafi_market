@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:ui';
+
 Products productsFromJson(String str) => Products.fromJson(json.decode(str));
 
 String productsToJson(Products data) => json.encode(data.toJson());
@@ -11,9 +13,9 @@ class Products {
     required this.products,
   });
 
-  final int page;
-  final int count;
-  final List<ProductsProduct> products;
+  int page;
+  int count;
+  List<ProductsProduct> products;
 
   factory Products.fromJson(Map<String, dynamic> json) => Products(
         page: json["page"],
@@ -45,30 +47,30 @@ class ProductsProduct {
     required this.color,
     required this.discount,
     required this.description,
+    required this.rateValue,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
-    required this.rateValue,
   });
 
-  final String id;
-  final String name;
-  final Category category;
-  final SubCategory subCategory;
-  final Seller seller;
-  final List<String> thumbnail;
-  final int price;
-  final int stockCount;
-  final int remainedStock;
-  final bool isAvailable;
-  final List<dynamic> size;
-  final List<String> color;
-  final int discount;
-  final String description;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
-  final int rateValue;
+  String id;
+  String name;
+  Category category;
+  SubCategory subCategory;
+  Seller seller;
+  List<String> thumbnail;
+  int price;
+  int stockCount;
+  int remainedStock;
+  bool isAvailable;
+  List<Size> size;
+  List<Color> color;
+  int discount;
+  String description;
+  int rateValue;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int v;
 
   factory ProductsProduct.fromJson(Map<String, dynamic> json) =>
       ProductsProduct(
@@ -82,14 +84,21 @@ class ProductsProduct {
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<dynamic>.from(json["size"].map((x) => x)),
-        color: List<String>.from(json["color"].map((x) => x)),
+        size: List<Size>.from(json["size"].map((x) => Size.fromJson(x))),
+        color: List<Color>.from(json["color"].map((x) {
+          String colorString = x.toString(); //
+          String valueString =
+              colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+          int value = int.parse(valueString, radix: 16);
+          Color otherColor = Color(value);
+          return otherColor;
+        })),
         discount: json["discount"],
         description: json["description"],
+        rateValue: json["rate_value"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
-        rateValue: json["rate_value"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,14 +112,14 @@ class ProductsProduct {
         "stock_count": stockCount,
         "remained_stock": remainedStock,
         "is_available": isAvailable,
-        "size": List<dynamic>.from(size.map((x) => x)),
+        "size": List<dynamic>.from(size.map((x) => x.toJson())),
         "color": List<dynamic>.from(color.map((x) => x)),
         "discount": discount,
         "description": description,
+        "rate_value": rateValue,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
-        "rate_value": rateValue,
       };
 }
 
@@ -123,11 +132,11 @@ class Category {
     required this.thumbnail,
   });
 
-  final String id;
-  final String name;
-  final List<String> subCategories;
-  final int v;
-  final String thumbnail;
+  String id;
+  String name;
+  List<String> subCategories;
+  int v;
+  String thumbnail;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["_id"],
@@ -167,23 +176,23 @@ class Seller {
     required this.v,
   });
 
-  final String bio;
-  final String link;
-  final String id;
-  final User user;
-  final String shopLocation;
-  final List<String> followers;
-  final String shopName;
-  final bool isVerified;
-  final String profilePicture;
-  final List<dynamic> shopThumbnails;
-  final String shopCategory;
-  final int income;
-  final int rateValue;
-  final List<dynamic> orders;
-  final List<SellerProduct> products;
-  final bool isActive;
-  final int v;
+  String bio;
+  String link;
+  String id;
+  User user;
+  String shopLocation;
+  List<String> followers;
+  String shopName;
+  bool isVerified;
+  String profilePicture;
+  List<dynamic> shopThumbnails;
+  String shopCategory;
+  int income;
+  int rateValue;
+  List<dynamic> orders;
+  List<SellerProduct> products;
+  bool isActive;
+  int v;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
         bio: json["bio"],
@@ -244,30 +253,30 @@ class SellerProduct {
     required this.color,
     required this.discount,
     required this.description,
+    required this.rateValue,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
-    required this.rateValue,
   });
 
-  final String id;
-  final String name;
-  final String category;
-  final String subCategory;
-  final String seller;
-  final List<String> thumbnail;
-  final int price;
-  final int stockCount;
-  final int remainedStock;
-  final bool isAvailable;
-  final List<dynamic> size;
-  final List<String> color;
-  final int discount;
-  final String description;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
-  final int rateValue;
+  String id;
+  String name;
+  String category;
+  String subCategory;
+  String seller;
+  List<String> thumbnail;
+  int price;
+  int stockCount;
+  int remainedStock;
+  bool isAvailable;
+  List<String> size;
+  List<String> color;
+  int discount;
+  String description;
+  int rateValue;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int v;
 
   factory SellerProduct.fromJson(Map<String, dynamic> json) => SellerProduct(
         id: json["_id"],
@@ -280,14 +289,14 @@ class SellerProduct {
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<dynamic>.from(json["size"].map((x) => x)),
+        size: List<String>.from(json["size"].map((x) => x)),
         color: List<String>.from(json["color"].map((x) => x)),
         discount: json["discount"],
         description: json["description"],
+        rateValue: json["rate_value"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
-        rateValue: json["rate_value"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -305,10 +314,10 @@ class SellerProduct {
         "color": List<dynamic>.from(color.map((x) => x)),
         "discount": discount,
         "description": description,
+        "rate_value": rateValue,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
-        "rate_value": rateValue,
       };
 }
 
@@ -332,22 +341,22 @@ class User {
     required this.order,
   });
 
-  final String id;
-  final String username;
-  final int mobileNumber;
-  final String password;
-  final bool isActive;
-  final bool isFullRegistered;
-  final List<dynamic> searches;
-  final List<dynamic> favorite;
-  final List<dynamic> subscriptions;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final int v;
-  final List<Cart> cart;
-  final List<String> notification;
-  final int wallet;
-  final List<dynamic> order;
+  String id;
+  String username;
+  int mobileNumber;
+  String password;
+  bool isActive;
+  bool isFullRegistered;
+  List<dynamic> searches;
+  List<dynamic> favorite;
+  List<dynamic> subscriptions;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int v;
+  List<Cart> cart;
+  List<String> notification;
+  int wallet;
+  List<dynamic> order;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["_id"],
@@ -395,20 +404,44 @@ class Cart {
     required this.id,
   });
 
-  final String product;
-  final int quantity;
-  final String id;
+  SellerProduct product;
+  int quantity;
+  String id;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        product: json["product"],
+        product: SellerProduct.fromJson(json["product"]),
         quantity: json["quantity"],
         id: json["_id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "product": product,
+        "product": product.toJson(),
         "quantity": quantity,
         "_id": id,
+      };
+}
+
+class Size {
+  Size({
+    required this.id,
+    required this.size,
+    required this.v,
+  });
+
+  String id;
+  String size;
+  int v;
+
+  factory Size.fromJson(Map<String, dynamic> json) => Size(
+        id: json["_id"],
+        size: json["size"],
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "size": size,
+        "__v": v,
       };
 }
 
@@ -419,9 +452,9 @@ class SubCategory {
     required this.v,
   });
 
-  final String id;
-  final String name;
-  final int v;
+  String id;
+  String name;
+  int v;
 
   factory SubCategory.fromJson(Map<String, dynamic> json) => SubCategory(
         id: json["_id"],

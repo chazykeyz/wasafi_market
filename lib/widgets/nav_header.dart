@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/main.dart';
-import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class NavHeader extends StatelessWidget {
@@ -36,9 +35,13 @@ class NavHeader extends StatelessWidget {
                 size: 24,
               ))
           : null,
-      title: Bold(
-        text: title,
-        size: 24,
+      titleSpacing: isPage ? 30 : 0,
+      title: Text(
+        title,
+        style: TextStyle(
+            fontSize: isPage ? 24 : 16,
+            color: isPage ? Colors.white : Colors.blue,
+            fontWeight: isPage ? FontWeight.w900 : FontWeight.normal),
       ),
       centerTitle: false,
       actions: [

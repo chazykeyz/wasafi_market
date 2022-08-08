@@ -41,18 +41,21 @@ class AuthRepo {
   }
 
   // saving the pre token
-  saveUserToken(String token, String refresh) async {
+  saveAccessToken(String token) async {
     apiClient.token = token;
     apiClient.updateHeader(token);
-    sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
     sharedPreferences.setString(AppConstant.TOKEN, token);
+  }
+
+  saveRefreshToken(String refresh) async {
+    sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
   }
 
 // save the main tokens
   savePreRegistUserToken(String token) async {
     apiClient.token = token;
     apiClient.updateHeader(token);
-    sharedPreferences.setString(AppConstant.TOKEN, token);
+    await sharedPreferences.setString(AppConstant.TOKEN, token);
   }
 
   // changing password

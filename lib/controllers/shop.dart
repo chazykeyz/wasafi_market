@@ -57,7 +57,6 @@ class ShopController extends GetxController implements GetxService {
 
   // getting the shop deatil
   Future<void> getShop(id) async {
-    shopDetails = [];
     Response response = await shopRepo.getShop(id);
     if (response.statusCode == 200) {
       shopDetails = [];

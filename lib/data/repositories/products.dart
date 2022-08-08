@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:wasafi_market/constant.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
+import 'package:wasafi_market/models/products/edit_product.dart';
 
 class ProductRepo {
   final ApiClient apiClient;
@@ -30,5 +31,16 @@ class ProductRepo {
 
   Future<Response> fetchSizes() async {
     return await apiClient.getData(AppConstant.SIZE_LIST);
+  }
+
+  // editing
+  Future<Response> editProduct(ProductEdit productEdit, id) async {
+    return await apiClient.updateData(
+        '${AppConstant.PRODUCT_MAIN}/$id', productEdit.toJson());
+  }
+
+  // deleting
+  Future<Response> deletingProduct(id) async {
+    return await apiClient.deletePost('${AppConstant.PRODUCT_MAIN}/$id');
   }
 }

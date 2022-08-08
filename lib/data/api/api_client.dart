@@ -26,25 +26,34 @@ class ApiClient extends GetConnect implements GetxService {
 
 // fetching grefresh token
   Future refreshToken() async {
-    Map<String, dynamic> body = {
-      "token": sharedPreferences.getString(AppConstant.REFRESH_TOKEN)
+    var _headers = {
+      "auth-token":
+          sharedPreferences.getString(AppConstant.REFRESH_TOKEN).toString()
     };
 
     Response response =
-        await post(AppConstant.GET_REFRESH_TOKEN, body, headers: _mainHeaders);
+        await post(AppConstant.GET_REFRESH_TOKEN, '', headers: _headers);
 
     if (response.statusCode == 200) {
-      updateHeader(response.body["accessToken"]);
-      sharedPreferences.setString(
-          AppConstant.REFRESH_TOKEN, response.body["accessToken"]);
-      sharedPreferences.setString(
-          AppConstant.TOKEN, response.body["refreshToken"]);
+      saveAccessToken(response.body["accessToken"]);
+      saveRefreshToken(response.body["refreshToken"]);
     } else {
       sharedPreferences.remove(AppConstant.REFRESH_TOKEN);
       sharedPreferences.remove(AppConstant.TOKEN);
       token = "";
       updateHeader("");
     }
+  }
+
+  // saving the pre token
+  saveAccessToken(String token) async {
+    token = token;
+    updateHeader(token);
+    sharedPreferences.setString(AppConstant.TOKEN, token);
+  }
+
+  saveRefreshToken(String refresh) async {
+    sharedPreferences.setString(AppConstant.REFRESH_TOKEN, refresh);
   }
 
 // checking token expeiration
@@ -87,6 +96,23 @@ class ApiClient extends GetConnect implements GetxService {
     }
     try {
       Response response = await post(uri, body, headers: _mainHeaders);
+      return response;
+    } catch (e) {
+      return Response(statusCode: 1, statusText: e.toString());
+    }
+  }
+
+  // deleting data function
+  Future<Response> deletePost(String uri) async {
+    if (token != "") {
+      checkingExpiration().then((value) {
+        if (value == false) {
+          refreshToken();
+        }
+      });
+    }
+    try {
+      Response response = await delete(uri, headers: _mainHeaders);
       return response;
     } catch (e) {
       return Response(statusCode: 1, statusText: e.toString());

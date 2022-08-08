@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wasafi_market/constant.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/cart.dart';
+import 'package:wasafi_market/controllers/order.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/shop.dart';
@@ -46,4 +47,5 @@ Future<void> init() async {
   Get.lazyPut(() => ShopController(shopRepo: Get.find()));
   Get.lazyPut(() => CartController(cartRepo: Get.find()));
   Get.lazyPut(() => UserController(userRepo: Get.find()));
+  Get.lazyPut(() => OrderController());
 }

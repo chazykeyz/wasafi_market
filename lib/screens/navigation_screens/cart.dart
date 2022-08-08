@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/cart.dart';
+import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/screens/directed_screens/checkout.dart';
+import 'package:wasafi_market/screens/directed_screens/product_detail.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
@@ -151,76 +154,126 @@ class _CartState extends State<Cart> {
                                           itemCount: userContent
                                               .userList[0].cart.length,
                                           itemBuilder: (context, index) {
-                                            return Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 5),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  // Get.to(() => const ProductDetail());
-                                                },
-                                                child: ListTile(
-                                                  leading: Container(
-                                                      width: 58,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        border: Border.all(
-                                                            color:
-                                                                Colors.white12),
-                                                        color: const Color
-                                                                .fromARGB(
-                                                            36, 238, 237, 237),
-                                                        image: DecorationImage(
-                                                            image: NetworkImage(
-                                                                userContent
-                                                                    .userList[0]
-                                                                    .cart[index]
-                                                                    .product
-                                                                    .thumbnail[0]),
-                                                            fit: BoxFit.cover),
-                                                      )),
-                                                  title: Bold(
-                                                    text: userContent
-                                                        .userList[0]
-                                                        .cart[index]
-                                                        .product
-                                                        .name,
-                                                    size: 14,
-                                                  ),
-                                                  subtitle: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Regular(
-                                                          text:
-                                                              "Tsh ${userContent.userList[0].cart[index].product.price.toString()} x ${userContent.userList[0].cart[index].quantity}",
-                                                          size: 14,
-                                                          color: Colors
-                                                              .blueAccent),
-                                                      Regular(
-                                                          text: userContent
+                                            return Slidable(
+                                              key: const ValueKey(0),
+                                              endActionPane: ActionPane(
+                                                  motion: const ScrollMotion(),
+                                                  // A pane can dismiss the Slidable.
+
+                                                  children: [
+                                                    SlidableAction(
+                                                      onPressed: (context) {
+                                                        deleteItems(userContent
+                                                            .userList[0]
+                                                            .cart[index]
+                                                            .product
+                                                            .id);
+                                                      },
+                                                      backgroundColor:
+                                                          Colors.redAccent,
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      icon:
+                                                          CupertinoIcons.delete,
+                                                      label: 'Delete',
+                                                    ),
+                                                  ]),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 5),
+                                                child:
+                                                    Builder(builder: (context) {
+                                                  return GetBuilder<
+                                                          ProductsController>(
+                                                      builder:
+                                                          (productContect) {
+                                                    return InkWell(
+                                                      onTap: () {
+                                                        if (productContect
+                                                            .productList
+                                                            .isNotEmpty) {
+                                                          Get.to(
+                                                              () =>
+                                                                  ProductDetail(
+                                                                    data: productContect.productList.firstWhere((element) =>
+                                                                        element
+                                                                            .id ==
+                                                                        userContent
+                                                                            .userList[0]
+                                                                            .cart[index]
+                                                                            .product
+                                                                            .id),
+                                                                  ));
+                                                        }
+                                                      },
+                                                      child: ListTile(
+                                                        leading: Container(
+                                                            width: 58,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20),
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .white12),
+                                                              color: const Color
+                                                                      .fromARGB(
+                                                                  36,
+                                                                  238,
+                                                                  237,
+                                                                  237),
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(userContent
                                                                       .userList[
                                                                           0]
                                                                       .cart[
                                                                           index]
                                                                       .product
-                                                                      .remainedStock !=
-                                                                  0
-                                                              ? '${userContent.userList[0].cart[index].product.remainedStock} Items Available'
-                                                              : "out of Stock",
+                                                                      .thumbnail[0]),
+                                                                  fit: BoxFit.cover),
+                                                            )),
+                                                        title: Bold(
+                                                          text: userContent
+                                                              .userList[0]
+                                                              .cart[index]
+                                                              .product
+                                                              .name,
                                                           size: 14,
-                                                          color: Colors.white54)
-                                                    ],
-                                                  ),
-                                                  trailing: const Icon(
-                                                    CupertinoIcons.clear,
-                                                    size: 16,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
+                                                        ),
+                                                        subtitle: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Regular(
+                                                                text:
+                                                                    "Tsh ${userContent.userList[0].cart[index].productPrice.toString()} x ${userContent.userList[0].cart[index].quantity}",
+                                                                size: 14,
+                                                                color: Colors
+                                                                    .blueAccent),
+                                                            Regular(
+                                                                text: userContent
+                                                                            .userList[
+                                                                                0]
+                                                                            .cart[
+                                                                                index]
+                                                                            .product
+                                                                            .remainedStock !=
+                                                                        0
+                                                                    ? '${userContent.userList[0].cart[index].product.remainedStock} Items Available'
+                                                                    : "out of Stock",
+                                                                size: 14,
+                                                                color: Colors
+                                                                    .white54)
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  });
+                                                }),
                                               ),
                                             );
                                           }),
@@ -239,8 +292,7 @@ class _CartState extends State<Cart> {
                                             text:
                                                 "Tsh ${userContent.userList[0].cart.fold(0, (sum, element) {
                                               return sum +
-                                                  (element.product.price *
-                                                      element.quantity);
+                                                  (element.totalProductPrice);
                                             }).toString()}/=",
                                             size: 15,
                                             color: Colors.white70)
@@ -257,10 +309,7 @@ class _CartState extends State<Cart> {
                                           horizontal: 60),
                                       height: 44,
                                       decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 1, color: Colors.white12),
-                                          color: const Color.fromARGB(
-                                              55, 68, 137, 255),
+                                          color: Colors.blue,
                                           borderRadius:
                                               BorderRadius.circular(16)),
                                       child: Row(
@@ -272,15 +321,6 @@ class _CartState extends State<Cart> {
                                               text: "Checkout Now",
                                               size: 15,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 4.0),
-                                              child: Icon(
-                                                CupertinoIcons
-                                                    .arrowshape_turn_up_right,
-                                                color: Colors.white,
-                                              ),
-                                            )
                                           ]),
                                     ),
                                   )

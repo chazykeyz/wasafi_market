@@ -15,9 +15,10 @@ import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class AddItems extends StatefulWidget {
-  const AddItems({Key? key, required this.userId}) : super(key: key);
+  const AddItems({Key? key, required this.userId, this.shopId})
+      : super(key: key);
   final String userId;
-
+  final dynamic shopId;
   @override
   State<AddItems> createState() => _AddItemsState();
 }
@@ -34,7 +35,9 @@ class _AddItemsState extends State<AddItems> {
   String _size = "";
   Color color = Colors.orange;
   String _category = "";
+  String _mainCategory = 'select category';
   String _subCategory = "";
+  String _finalSubCategory = 'Select SubCategory';
   // lists
   final List _sizeList = [];
   final List<Color> _colorList = [];
@@ -50,7 +53,7 @@ class _AddItemsState extends State<AddItems> {
     Get.find<ProductsController>().getSizes();
     Get.find<ProductCategoryController>().getProductCategory();
     Get.find<ShopController>().getShops();
-
+// final fucntion to submit
     void sendProduct(_seller) {
       ProductAdd productAdd = ProductAdd(_sizeList, _colorList, _discount,
           name: _name,
@@ -61,7 +64,47 @@ class _AddItemsState extends State<AddItems> {
           stockCount: _stockCount,
           description: _description,
           seller: _seller);
-      Get.find<ProductsController>().postProducts(productAdd);
+
+      if (_imageList.isEmpty) {
+        showCustomSnackBar(
+            "image is required to the product, please add one or more images",
+            title: "Product Image");
+      } else if (_name == '') {
+        showCustomSnackBar(
+            "field name can't be empty, please assign product's name",
+            title: "Product Name");
+      } else if (_price == 0) {
+        showCustomSnackBar(
+            "field price can't be empty, please assign product's price",
+            title: "Product price");
+      } else if (_stockCount == 0) {
+        showCustomSnackBar(
+            "field stock count can't be empty, please assign product's stock count",
+            title: "Product stock count");
+      } else if (_description == "") {
+        showCustomSnackBar(
+            "field details can't be empty, please assign product's details",
+            title: "Product details");
+      } else if (_category == "") {
+        showCustomSnackBar(
+            "field category can't be empty, please assign product's category",
+            title: "Category");
+      } else if (_subCategory == "") {
+        showCustomSnackBar(
+            "field subcategory can't be empty, please assign product's subcategory",
+            title: "subcategory");
+      } else {
+        Get.find<ProductsController>().postProducts(productAdd).then((status) {
+          if (status.isSuccess) {
+            showCustomSnackBar(status.message, title: "Adding product");
+            Get.find<ShopController>()
+                .getShop(widget.shopId)
+                .then((value) => Get.back());
+          } else {
+            showCustomSnackBar(status.message, title: "Adding product");
+          }
+        });
+      }
     }
 
     // posting images
@@ -88,7 +131,7 @@ class _AddItemsState extends State<AddItems> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                GestureDetector(
+                                InkWell(
                                   onTap: () {
                                     selectedImageFromCamera();
                                     Get.back();
@@ -107,7 +150,7 @@ class _AddItemsState extends State<AddItems> {
                                             color: Colors.blue)),
                                   ),
                                 ),
-                                GestureDetector(
+                                InkWell(
                                   onTap: () {
                                     selectedImageFromGallery();
                                     Get.back();
@@ -186,6 +229,7 @@ class _AddItemsState extends State<AddItems> {
                               onTap: () {
                                 setState(() {
                                   _category = mainCategory[index].id;
+                                  _mainCategory = mainCategory[index].name;
                                   Get.back();
                                 });
                               },
@@ -255,6 +299,9 @@ class _AddItemsState extends State<AddItems> {
                                 setState(() {
                                   _subCategory =
                                       categoryObject[0].subCategories[index].id;
+                                  _finalSubCategory = categoryObject[0]
+                                      .subCategories[index]
+                                      .name;
                                   Get.back();
                                 });
                               },
@@ -344,9 +391,7 @@ class _AddItemsState extends State<AddItems> {
                               color: Colors.blue,
                             ),
                             Regular(
-                                text: "Add Images",
-                                size: 10,
-                                color: Colors.blue)
+                                text: "+ Images", size: 15, color: Colors.blue)
                           ],
                         ),
                       ),
@@ -1004,9 +1049,7 @@ class _AddItemsState extends State<AddItems> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 3.0),
                                     child: Regular(
-                                      text: _category == ""
-                                          ? "select category"
-                                          : _category,
+                                      text: _mainCategory,
                                       size: 16,
                                       color: Colors.blue,
                                     ),
@@ -1054,9 +1097,7 @@ class _AddItemsState extends State<AddItems> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 3.0),
                                     child: Regular(
-                                      text: _subCategory == ""
-                                          ? "select category"
-                                          : _subCategory,
+                                      text: _finalSubCategory,
                                       size: 16,
                                       color: Colors.blue,
                                     ),
@@ -1079,26 +1120,34 @@ class _AddItemsState extends State<AddItems> {
                         .where((e) => e.user.id == widget.userId)
                         .toList();
 
-                    return GestureDetector(
-                      onTap: () {
-                        if (shopContent.shopList.isNotEmpty) {
-                          sendProduct(_idInstance[0].id);
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                            child: Regular(
-                                text: "Save Product",
-                                size: 16,
-                                color: Colors.white)),
-                      ),
-                    );
+                    return GetBuilder<ProductsController>(
+                        builder: (productContent) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (!productContent.isLoading) {
+                            if (shopContent.shopList.isNotEmpty) {
+                              sendProduct(_idInstance[0].id);
+                            }
+                          }
+                        },
+                        child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            height: 50,
+                            decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Center(
+                                child: productContent.isLoading
+                                    ? const CupertinoActivityIndicator(
+                                        color: Colors.white,
+                                      )
+                                    : const Regular(
+                                        text: "Save Product",
+                                        size: 16,
+                                        color: Colors.white))),
+                      );
+                    });
                   }),
                 ],
               ),
@@ -1303,10 +1352,14 @@ class _AddItemsState extends State<AddItems> {
   void selectedImageFromGallery() async {
     final XFile? selectedImage =
         await _picker.pickImage(source: ImageSource.gallery);
-    if (selectedImage!.path.isNotEmpty) {
-      _imageList.add(selectedImage);
+    if (selectedImage != null) {
+      if (selectedImage.path.isNotEmpty) {
+        _imageList.add(selectedImage);
+      } else {
+        _imageList;
+      }
+      setState(() {});
     }
-    setState(() {});
   }
 
   // from camera

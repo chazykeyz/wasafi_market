@@ -24,8 +24,8 @@ class ProductDetail extends StatefulWidget {
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  int size = 0;
-  int _color = 0;
+  String size = '';
+  Color _color = Colors.transparent;
 
   @override
   void initState() {
@@ -40,6 +40,10 @@ class _ProductDetailState extends State<ProductDetail> {
             ));
       } else {
         Get.find<UserController>().gettingUser();
+        setState(() {
+          size = widget.data.size[0].id;
+          _color = widget.data.color[0];
+        });
       }
     });
   }
@@ -49,7 +53,11 @@ class _ProductDetailState extends State<ProductDetail> {
     // add to cart
     void addToCart(item) {
       CartController cartController = Get.find<CartController>();
-      CartModel cartModel = CartModel(product: item.id);
+      CartModel cartModel = CartModel(
+          product: item.id,
+          color: _color.toString(),
+          size: size,
+          productPrice: item.price);
       cartController.cartPost(cartModel).then((status) {
         if (status.isSuccess) {
           dynamic name = item.name;
@@ -68,10 +76,10 @@ class _ProductDetailState extends State<ProductDetail> {
       cartController.cartItemRemove(item.id).then((status) {
         if (status.isSuccess) {
           dynamic name = item.name;
-          showCustomSnackBar("$name successful deleted!", title: "Cart");
+          showCustomSnackBar("$name successful removed!", title: "Cart");
           Get.find<UserController>().gettingUser();
         } else {
-          showCustomSnackBar("deleting item failed!", title: "Cart");
+          showCustomSnackBar("Removing item failed!", title: "Cart");
         }
       });
     }
@@ -233,7 +241,8 @@ class _ProductDetailState extends State<ProductDetail> {
                                           child: GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                size = index;
+                                                size =
+                                                    widget.data.size[index].id;
                                               });
                                             },
                                             child: Container(
@@ -245,7 +254,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                               decoration: BoxDecoration(
                                                   border: Border.all(
                                                       width: 1,
-                                                      color: size == index
+                                                      color: size ==
+                                                              widget
+                                                                  .data
+                                                                  .size[index]
+                                                                  .id
                                                           ? Colors.blueAccent
                                                           : Colors.transparent),
                                                   color: const Color.fromARGB(
@@ -293,32 +306,41 @@ class _ProductDetailState extends State<ProductDetail> {
                                           child: GestureDetector(
                                             onTap: () {
                                               setState(() {
-                                                _color = index;
+                                                _color =
+                                                    widget.data.color[index];
                                               });
                                             },
                                             child: Center(
                                               child: Container(
                                                 margin: const EdgeInsets.all(3),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8),
-                                                constraints:
-                                                    const BoxConstraints(
-                                                        maxHeight: 32,
-                                                        minWidth: 38),
+                                                height: 40,
+                                                width: 40,
                                                 decoration: BoxDecoration(
-                                                    color: _color == index
-                                                        ? Colors.blueAccent
-                                                        : Colors.white
-                                                            .withOpacity(.2),
+                                                    color: Colors.black,
+                                                    border: Border.all(
+                                                        color: _color ==
+                                                                widget.data
+                                                                        .color[
+                                                                    index]
+                                                            ? Colors.blueAccent
+                                                            : Colors.white
+                                                                .withOpacity(
+                                                                    .2),
+                                                        width: 2),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            14)),
-                                                child: const Center(
-                                                  child: Regular(
-                                                      text: "Orange",
-                                                      size: 12,
-                                                      color: Colors.white),
+                                                            20)),
+                                                child: Center(
+                                                  child: Container(
+                                                    height: 34,
+                                                    width: 34,
+                                                    decoration: BoxDecoration(
+                                                        color: widget
+                                                            .data.color[index],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(20)),
+                                                  ),
                                                 ),
                                               ),
                                             ),

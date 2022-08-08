@@ -4,6 +4,8 @@ class AppConstant {
   static const String APPNAME = "WASAFI MARKET";
   static const String APPVERSION = "1";
 
+  static const String MAP_KEY =
+      "pk.eyJ1IjoiY2hhenlrZXl6IiwiYSI6ImNsMjRsOXY5YzA5OXEzZHFpaDFuZHBheXEifQ.IrMMd7lfJiqEfAgzIGovDQ";
   static const String BASEURI = "http://192.168.100.54:3000/";
   static const String SIGNUP = "api/auth/register/";
   static const String VERIFY = "api/auth/verify/";

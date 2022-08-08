@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 Shops shopsFromJson(String str) => Shops.fromJson(json.decode(str));
 
 String shopsToJson(Shops data) => json.encode(data.toJson());
@@ -143,7 +145,7 @@ class Product {
   final int remainedStock;
   final bool isAvailable;
   final List<dynamic> size;
-  final List<String> color;
+  final List<Color> color;
   final int discount;
   final String description;
   final DateTime createdAt;
@@ -163,7 +165,13 @@ class Product {
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
         size: List<dynamic>.from(json["size"].map((x) => x)),
-        color: List<String>.from(json["color"].map((x) => x)),
+        color: List<Color>.from(json["color"].map((x) {
+          String valueString =
+              x.split('(0x')[1].split(')')[0]; // kind of hacky..
+          int value = int.parse(valueString, radix: 16);
+          Color otherColor = Color(value);
+          return otherColor;
+        })),
         discount: json["discount"],
         description: json["description"],
         createdAt: DateTime.parse(json["createdAt"]),

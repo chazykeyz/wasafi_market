@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'dart:ui';
-
 Products productsFromJson(String str) => Products.fromJson(json.decode(str));
 
 String productsToJson(Products data) => json.encode(data.toJson());
@@ -58,13 +56,13 @@ class ProductsProduct {
   Category category;
   SubCategory subCategory;
   Seller seller;
-  List<String> thumbnail;
+  List<dynamic> thumbnail;
   int price;
   int stockCount;
   int remainedStock;
   bool isAvailable;
-  List<Size> size;
-  List<Color> color;
+  List<dynamic> size;
+  List<dynamic> color;
   int discount;
   String description;
   int rateValue;
@@ -79,20 +77,13 @@ class ProductsProduct {
         category: Category.fromJson(json["category"]),
         subCategory: SubCategory.fromJson(json["subCategory"]),
         seller: Seller.fromJson(json["seller"]),
-        thumbnail: List<String>.from(json["thumbnail"].map((x) => x)),
+        thumbnail: List<dynamic>.from(json["thumbnail"].map((x) => x)),
         price: json["price"],
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<Size>.from(json["size"].map((x) => Size.fromJson(x))),
-        color: List<Color>.from(json["color"].map((x) {
-          String colorString = x.toString(); //
-          String valueString =
-              colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
-          int value = int.parse(valueString, radix: 16);
-          Color otherColor = Color(value);
-          return otherColor;
-        })),
+        size: List<dynamic>.from(json["size"].map((x) => x)),
+        color: List<dynamic>.from(json["color"].map((x) => x)),
         discount: json["discount"],
         description: json["description"],
         rateValue: json["rate_value"],
@@ -112,7 +103,7 @@ class ProductsProduct {
         "stock_count": stockCount,
         "remained_stock": remainedStock,
         "is_available": isAvailable,
-        "size": List<dynamic>.from(size.map((x) => x.toJson())),
+        "size": List<dynamic>.from(size.map((x) => x)),
         "color": List<dynamic>.from(color.map((x) => x)),
         "discount": discount,
         "description": description,
@@ -157,11 +148,11 @@ class Category {
 
 class Seller {
   Seller({
-    required this.bio,
-    required this.link,
     required this.id,
     required this.user,
     required this.shopLocation,
+    required this.bio,
+    required this.link,
     required this.followers,
     required this.shopName,
     required this.isVerified,
@@ -176,12 +167,12 @@ class Seller {
     required this.v,
   });
 
-  String bio;
-  String link;
   String id;
   User user;
   String shopLocation;
-  List<String> followers;
+  String bio;
+  String link;
+  List<dynamic> followers;
   String shopName;
   bool isVerified;
   String profilePicture;
@@ -195,12 +186,12 @@ class Seller {
   int v;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
-        bio: json["bio"],
-        link: json["link"],
         id: json["_id"],
         user: User.fromJson(json["user"]),
         shopLocation: json["shop_location"],
-        followers: List<String>.from(json["followers"].map((x) => x)),
+        bio: json["bio"],
+        link: json["link"],
+        followers: List<dynamic>.from(json["followers"].map((x) => x)),
         shopName: json["shop_name"],
         isVerified: json["is_verified"],
         profilePicture: json["profilePicture"],
@@ -217,11 +208,11 @@ class Seller {
       );
 
   Map<String, dynamic> toJson() => {
-        "bio": bio,
-        "link": link,
         "_id": id,
         "user": user.toJson(),
         "shop_location": shopLocation,
+        "bio": bio,
+        "link": link,
         "followers": List<dynamic>.from(followers.map((x) => x)),
         "shop_name": shopName,
         "is_verified": isVerified,
@@ -264,13 +255,13 @@ class SellerProduct {
   String category;
   String subCategory;
   String seller;
-  List<String> thumbnail;
+  List<dynamic> thumbnail;
   int price;
   int stockCount;
   int remainedStock;
   bool isAvailable;
-  List<String> size;
-  List<String> color;
+  List<dynamic> size;
+  List<dynamic> color;
   int discount;
   String description;
   int rateValue;
@@ -284,13 +275,13 @@ class SellerProduct {
         category: json["category"],
         subCategory: json["subCategory"],
         seller: json["seller"],
-        thumbnail: List<String>.from(json["thumbnail"].map((x) => x)),
+        thumbnail: List<dynamic>.from(json["thumbnail"].map((x) => x)),
         price: json["price"],
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<String>.from(json["size"].map((x) => x)),
-        color: List<String>.from(json["color"].map((x) => x)),
+        size: List<dynamic>.from(json["size"].map((x) => x)),
+        color: List<dynamic>.from(json["color"].map((x) => x)),
         discount: json["discount"],
         description: json["description"],
         rateValue: json["rate_value"],
@@ -401,47 +392,39 @@ class Cart {
   Cart({
     required this.product,
     required this.quantity,
+    required this.productPrice,
+    required this.totalProductPrice,
+    required this.color,
+    required this.size,
     required this.id,
   });
 
-  SellerProduct product;
+  dynamic product;
   int quantity;
+  int productPrice;
+  int totalProductPrice;
+  String color;
+  String size;
   String id;
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        product: SellerProduct.fromJson(json["product"]),
+        product: json["product"],
         quantity: json["quantity"],
-        id: json["_id"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "product": product.toJson(),
-        "quantity": quantity,
-        "_id": id,
-      };
-}
-
-class Size {
-  Size({
-    required this.id,
-    required this.size,
-    required this.v,
-  });
-
-  String id;
-  String size;
-  int v;
-
-  factory Size.fromJson(Map<String, dynamic> json) => Size(
-        id: json["_id"],
+        productPrice: json["product_price"],
+        totalProductPrice: json["total_product_price"],
+        color: json["color"],
         size: json["size"],
-        v: json["__v"],
+        id: json["_id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
+        "product": product,
+        "quantity": quantity,
+        "product_price": productPrice,
+        "total_product_price": totalProductPrice,
+        "color": color,
         "size": size,
-        "__v": v,
+        "_id": id,
       };
 }
 

@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/product_short_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -14,24 +13,11 @@ class OrderList extends StatelessWidget {
       backgroundColor: Colors.black,
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            centerTitle: false,
-            pinned: true,
-            backgroundColor: Colors.black,
-            automaticallyImplyLeading: false,
-            leading: GestureDetector(
-                onTap: () {
-                  Get.back();
-                },
-                child: Center(
-                  child: Container(
-                      margin: const EdgeInsets.all(5),
-                      child: const Icon(
-                        CupertinoIcons.chevron_back,
-                        size: 30,
-                      )),
-                )),
-            title: const Bold(text: "Orders Detail", size: 22),
+          const NavHeader(
+            userContent: '',
+            isPage: false,
+            title: 'Orders Details',
+            noCart: false,
           ),
           SliverToBoxAdapter(
               child: Container(
@@ -52,11 +38,17 @@ class OrderList extends StatelessWidget {
                           size: 15,
                         ),
                       ),
+                      Center(
+                          child: Container(
+                        height: .5,
+                        width: MediaQuery.of(context).size.width,
+                        color: Colors.white24,
+                      )),
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: MediaQuery.of(context).size.height - 380,
+                              height: MediaQuery.of(context).size.height - 280,
                               child: MediaQuery.removePadding(
                                 removeTop: true,
                                 context: context,
@@ -78,15 +70,15 @@ class OrderList extends StatelessWidget {
                             Center(
                                 child: Container(
                               height: .5,
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              width: MediaQuery.of(context).size.width - 100,
+                              width: MediaQuery.of(context).size.width,
                               color: Colors.white24,
                             )),
-                            Padding(
+                            Container(
+                              width: double.infinity,
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: const [
                                   Bold(text: "Total Amount", size: 20),
                                   Regular(
@@ -95,26 +87,6 @@ class OrderList extends StatelessWidget {
                                       color: Colors.blueAccent)
                                 ],
                               ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.all(4),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 60),
-                              height: 44,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1, color: Colors.white12),
-                                  color: const Color.fromARGB(55, 68, 137, 255),
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Regular(
-                                      color: Colors.white,
-                                      text: "Cancel Order",
-                                      size: 15,
-                                    ),
-                                  ]),
                             ),
                           ])
                     ],

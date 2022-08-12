@@ -27,4 +27,10 @@ class ShopRepo {
   Future<Response> subscribeShop(id) async {
     return await apiClient.updateData('${AppConstant.SUBSCRIBE_SHOP}$id', '');
   }
+
+  // update shop
+  Future<Response> updateShop(id, shopUpdate) async {
+    return await apiClient.updateData(
+        '${AppConstant.SHOP_ID}/$id', shopUpdate.toJson());
+  }
 }

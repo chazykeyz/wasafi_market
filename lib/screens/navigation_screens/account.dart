@@ -8,9 +8,12 @@ import 'package:wasafi_market/controllers/shop.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/auth/password.dart';
+import 'package:wasafi_market/models/shop/shops.dart';
 import 'package:wasafi_market/models/user/username.dart';
 import 'package:wasafi_market/screens/directed_screens/add_product.dart';
+import 'package:wasafi_market/screens/directed_screens/customers.dart';
 import 'package:wasafi_market/screens/directed_screens/favorite.dart';
+import 'package:wasafi_market/screens/directed_screens/order.dart';
 import 'package:wasafi_market/screens/navigation_screens/notification.dart';
 import 'package:wasafi_market/screens/directed_screens/subscription.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
@@ -365,6 +368,303 @@ class _AccountState extends State<Account> {
             });
       }
 
+// bio
+      void openBio(data) {
+        TextEditingController bioController =
+            TextEditingController(text: "${data.bio}");
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                color: Colors.black,
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Bold(text: "Shop Bio", size: 20),
+                        Container(
+                          height: 1,
+                          color: Colors.black,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border:
+                                    Border.all(width: 1, color: Colors.white30),
+                                color: Colors.white12),
+                            child: TextField(
+                              controller: bioController,
+                              maxLines: 3,
+                              minLines: 1,
+                              style: const TextStyle(color: Colors.white70),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  counterText: "",
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white70),
+                                  hintText: "${data.bio}"),
+                            )),
+                        GestureDetector(
+                          onTap: () {
+                            BioUpdate bioUpdate =
+                                BioUpdate(bio: bioController.text);
+                            Get.find<ShopController>()
+                                .updateShop(data.id, bioUpdate)
+                                .then((status) {
+                              if (status.isSuccess) {
+                                Get.find<ShopController>().getShops();
+                                showCustomSnackBar("Bio Edited successful!",
+                                    title: "Bio Editing");
+                              } else {
+                                showCustomSnackBar("Bio Editing Failed!",
+                                    title: "Bio Editing");
+                                Get.back();
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            height: 44,
+                            decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: const Center(
+                              child: Regular(
+                                color: Colors.white,
+                                text: "Save",
+                                size: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              );
+            });
+      }
+
+      // location
+      void openLocation(data) {
+        TextEditingController locationController =
+            TextEditingController(text: "${data.shopLocation}");
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                color: Colors.black,
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Row(children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(
+                              CupertinoIcons.pin,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Bold(text: "Shop Location", size: 20)
+                        ]),
+                        Container(
+                          height: 1,
+                          color: Colors.black,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border:
+                                    Border.all(width: 1, color: Colors.white30),
+                                color: Colors.white12),
+                            child: TextField(
+                              controller: locationController,
+                              style: const TextStyle(color: Colors.white70),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  counterText: "",
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white70),
+                                  hintText: "${data.shopLocation}"),
+                            )),
+                        GestureDetector(
+                          onTap: () {
+                            LocationUpdate locationUpdate = LocationUpdate(
+                                shopLocation: locationController.text);
+                            Get.find<ShopController>()
+                                .updateShop(data.id, locationUpdate)
+                                .then((status) {
+                              if (status.isSuccess) {
+                                Get.find<ShopController>().getShops();
+                                showCustomSnackBar(
+                                    "location Edited successful!",
+                                    title: "Location Editing");
+                              } else {
+                                showCustomSnackBar("Bio Editing Failed!",
+                                    title: "Location Editing");
+                                Get.back();
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            height: 44,
+                            decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: const Center(
+                              child: Regular(
+                                color: Colors.white,
+                                text: "Save",
+                                size: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              );
+            });
+      }
+
+// website
+      void openWebsite(data) {
+        TextEditingController websiteController =
+            TextEditingController(text: "${data.link}");
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                color: Colors.black,
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: const BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    height: 300,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Row(children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(
+                              CupertinoIcons.link,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Bold(text: "Shop Website", size: 20)
+                        ]),
+                        Container(
+                          height: 1,
+                          color: Colors.black,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                        ),
+                        Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border:
+                                    Border.all(width: 1, color: Colors.white30),
+                                color: Colors.white12),
+                            child: TextField(
+                              controller: websiteController,
+                              style: const TextStyle(color: Colors.white70),
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  counterText: "",
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white70),
+                                  hintText: data.link.length != 0
+                                      ? '${data.link}'
+                                      : "Enter online link of your business"),
+                            )),
+                        GestureDetector(
+                          onTap: () {
+                            WebsiteUpdate websiteUpdate =
+                                WebsiteUpdate(link: websiteController.text);
+                            Get.find<ShopController>()
+                                .updateShop(data.id, websiteUpdate)
+                                .then((status) {
+                              if (status.isSuccess) {
+                                Get.find<ShopController>().getShops();
+                                showCustomSnackBar(
+                                    "location Edited successful!",
+                                    title: "Location Editing");
+                              } else {
+                                showCustomSnackBar("Bio Editing Failed!",
+                                    title: "Location Editing");
+                                Get.back();
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.symmetric(horizontal: 60),
+                            height: 44,
+                            decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(16)),
+                            child: const Center(
+                              child: Regular(
+                                color: Colors.white,
+                                text: "Save",
+                                size: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+              );
+            });
+      }
+
       return userContent.userList.isEmpty
           ? const Center(
               child: CupertinoActivityIndicator(
@@ -500,53 +800,54 @@ class _AccountState extends State<Account> {
                                   ),
                                   child: Column(
                                     children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.white12),
+                                      // SHOP BIO
+                                      InkWell(
+                                        onTap: () {
+                                          openBio(shopInformation[0]);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.white12),
+                                            ),
                                           ),
-                                        ),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 2),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: const [
-                                                  Icon(
-                                                    CupertinoIcons.info,
-                                                    color: Colors.blue,
-                                                    size: 24,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8.0),
-                                                    child: Regular(
-                                                      text: "Shop Bio",
-                                                      size: 15,
-                                                      color: Colors.white70,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 2),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: const [
+                                                    Icon(
+                                                      CupertinoIcons.info,
+                                                      color: Colors.blue,
+                                                      size: 24,
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() =>
-                                                      const Subscription());
-                                                },
-                                                child: const Icon(
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8.0),
+                                                      child: Regular(
+                                                        text: "Shop Bio",
+                                                        size: 15,
+                                                        color: Colors.white70,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                const Icon(
                                                   CupertinoIcons.chevron_right,
                                                   color: Colors.white54,
                                                   size: 20,
-                                                ),
-                                              )
-                                            ]),
+                                                )
+                                              ]),
+                                        ),
                                       ),
                                       Container(
                                         padding: const EdgeInsets.all(10),
@@ -600,95 +901,112 @@ class _AccountState extends State<Account> {
                                               )
                                             ]),
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: const BoxDecoration(
-                                          border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.white12),
+                                      //  WEBSITE
+                                      InkWell(
+                                        onTap: () {
+                                          openWebsite(shopInformation[0]);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.white12),
+                                            ),
                                           ),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 2),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: const [
+                                                    Icon(
+                                                      CupertinoIcons.link,
+                                                      color: Colors.blue,
+                                                      size: 24,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8.0),
+                                                      child: Regular(
+                                                        text: "Website",
+                                                        size: 15,
+                                                        color: Colors.white70,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(
+                                                        () => const Favorite());
+                                                  },
+                                                  child: const Icon(
+                                                    CupertinoIcons
+                                                        .chevron_right,
+                                                    color: Colors.white54,
+                                                    size: 20,
+                                                  ),
+                                                )
+                                              ]),
                                         ),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 2),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: const [
-                                                  Icon(
-                                                    CupertinoIcons.link,
-                                                    color: Colors.blue,
-                                                    size: 24,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8.0),
-                                                    child: Regular(
-                                                      text: "Website",
-                                                      size: 15,
-                                                      color: Colors.white70,
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.to(
-                                                      () => const Favorite());
-                                                },
-                                                child: const Icon(
-                                                  CupertinoIcons.chevron_right,
-                                                  color: Colors.white54,
-                                                  size: 20,
-                                                ),
-                                              )
-                                            ]),
                                       ),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 2),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: const [
-                                                  Icon(
-                                                    CupertinoIcons.pin,
-                                                    color: Colors.blue,
-                                                    size: 24,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8.0),
-                                                    child: Regular(
-                                                      text: "Location",
-                                                      size: 15,
-                                                      color: Colors.white70,
+                                      // LOCATION
+                                      InkWell(
+                                        onTap: () {
+                                          openLocation(shopInformation[0]);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 2),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: const [
+                                                    Icon(
+                                                      CupertinoIcons.pin,
+                                                      color: Colors.blue,
+                                                      size: 24,
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.to(() =>
-                                                      const Subscription());
-                                                },
-                                                child: const Icon(
-                                                  CupertinoIcons.chevron_right,
-                                                  color: Colors.white54,
-                                                  size: 20,
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8.0),
+                                                      child: Regular(
+                                                        text: "Location",
+                                                        size: 15,
+                                                        color: Colors.white70,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                              )
-                                            ]),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Get.to(() => Subscription(
+                                                        userInfo: userContent
+                                                            .userList[0]));
+                                                  },
+                                                  child: const Icon(
+                                                    CupertinoIcons
+                                                        .chevron_right,
+                                                    color: Colors.white54,
+                                                    size: 20,
+                                                  ),
+                                                )
+                                              ]),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -712,9 +1030,10 @@ class _AccountState extends State<Account> {
                                             BorderRadius.circular(15)),
                                     child: Column(
                                       children: [
+                                        // CUSTOMERS
                                         InkWell(
                                           onTap: () {
-                                            Get.to(() => const Favorite());
+                                            Get.to(() => const Customers());
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.all(10),
@@ -770,9 +1089,12 @@ class _AccountState extends State<Account> {
                                                 ]),
                                           ),
                                         ),
+                                        // SHOP ORDERS
                                         InkWell(
                                           onTap: () {
-                                            Get.to(() => const Favorite());
+                                            Get.to(() => const Orders(
+                                                  customer: false,
+                                                ));
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.all(10),
@@ -919,190 +1241,160 @@ class _AccountState extends State<Account> {
                             borderRadius: BorderRadius.circular(15)),
                         child: Column(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(color: Colors.white12),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const Favorite());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(color: Colors.white12),
+                                  ),
                                 ),
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          CupertinoIcons.hand_thumbsup,
-                                          color: Colors.blue,
-                                          size: 24,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Regular(
-                                            text: "Wish List ",
-                                            size: 15,
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => const Favorite());
-                                      },
-                                      child: const Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.white60,
-                                        size: 20,
-                                      ),
-                                    )
-                                  ]),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.white12)),
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          CupertinoIcons.person_2,
-                                          color: Colors.blue,
-                                          size: 24,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Regular(
-                                            text: "Subscriptions ",
-                                            size: 15,
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => const Subscription());
-                                      },
-                                      child: const Icon(
-                                        CupertinoIcons.chevron_right,
-                                        color: Colors.white60,
-                                        size: 20,
-                                      ),
-                                    )
-                                  ]),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.white12)),
-                              ),
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          CupertinoIcons.time,
-                                          color: Colors.blue,
-                                          size: 24,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Regular(
-                                            text: "History",
-                                            size: 15,
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => const Favorite());
-                                      },
-                                      child: Row(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: const [
                                           Icon(
-                                            CupertinoIcons.chevron_right,
-                                            color: Colors.white60,
-                                            size: 20,
+                                            CupertinoIcons.hand_thumbsup,
+                                            color: Colors.blue,
+                                            size: 24,
                                           ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Wish List ",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
-                                  ]),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 2),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          CupertinoIcons.info,
-                                          color: Colors.blue,
-                                          size: 24,
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => const Favorite());
+                                        },
+                                        child: const Icon(
+                                          CupertinoIcons.chevron_right,
+                                          color: Colors.white60,
+                                          size: 20,
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Regular(
-                                            text: "Sent Orders ",
-                                            size: 15,
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.to(() => const Favorite());
-                                      },
-                                      child: Row(
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => Subscription(
+                                    userInfo: userContent.userList[0]));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom:
+                                          BorderSide(color: Colors.white12)),
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: const [
                                           Icon(
-                                            CupertinoIcons.chevron_right,
-                                            color: Colors.white60,
-                                            size: 20,
+                                            CupertinoIcons.person_2,
+                                            color: Colors.blue,
+                                            size: 24,
                                           ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Subscriptions ",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
                                         ],
                                       ),
-                                    )
-                                  ]),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => Subscription(
+                                                userInfo:
+                                                    userContent.userList[0],
+                                              ));
+                                        },
+                                        child: const Icon(
+                                          CupertinoIcons.chevron_right,
+                                          color: Colors.white60,
+                                          size: 20,
+                                        ),
+                                      )
+                                    ]),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const Orders(customer: false));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 2),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            CupertinoIcons.info,
+                                            color: Colors.blue,
+                                            size: 24,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Regular(
+                                              text: "Sent Orders ",
+                                              size: 15,
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => const Favorite());
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: const [
+                                            Icon(
+                                              CupertinoIcons.chevron_right,
+                                              color: Colors.white60,
+                                              size: 20,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ]),
+                              ),
                             ),
                           ],
                         ),

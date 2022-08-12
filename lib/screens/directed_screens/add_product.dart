@@ -8,6 +8,7 @@ import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/shop.dart';
 import 'package:wasafi_market/screens/directed_screens/add_items.dart';
 import 'package:wasafi_market/screens/directed_screens/editing_items.dart';
+import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
@@ -199,104 +200,43 @@ class _ProductManagementState extends State<ProductManagement> {
                 ),
               )
             : CustomScrollView(slivers: [
-                SliverAppBar(
-                  backgroundColor: Colors.transparent,
-                  title: const Bold(
-                    text: "Products",
-                    size: 24,
-                  ),
-                  centerTitle: false,
-                  automaticallyImplyLeading: false,
-                  leading: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Center(
-                        child: Container(
-                            margin: const EdgeInsets.all(5),
-                            child: const Icon(
-                              CupertinoIcons.chevron_back,
-                              size: 30,
-                              color: Colors.blue,
-                            )),
-                      )),
-                  leadingWidth: 20,
-                  actions: [
-                    GestureDetector(
-                        onTap: () {
-                          addItem(shopContent.shopDetails[0]);
-                        },
-                        child: Container(
-                            margin: const EdgeInsets.all(5),
-                            width: 47,
-                            child: Stack(children: [
-                              Container(
-                                margin: const EdgeInsets.only(top: 8),
-                                child: const Icon(
-                                  CupertinoIcons.plus,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            ])))
-                  ],
-                  pinned: true,
-                  bottom: (PreferredSize(
-                      child: Container(
-                        color: const Color.fromARGB(14, 255, 255, 255),
-                        height: 1.0,
-                      ),
-                      preferredSize: const Size.fromHeight(1.0))),
-                  floating: false,
-                  expandedHeight: 100,
-                  collapsedHeight: 70,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Column(children: [
-                        const SizedBox(
-                          height: 90,
-                          width: 10,
-                        ),
-                        Container(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width - 40,
-                          margin: const EdgeInsets.all(4),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              color: Colors.white24),
-                          child: TextField(
-                            onChanged: (value) {
-                              if (value != "") {
-                                isEmpty = false;
-                                setState(() {});
-                              } else {
-                                isEmpty = true;
-                                setState(() {});
-                              }
-                            },
-                            style: const TextStyle(color: Colors.white),
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintStyle: TextStyle(color: Colors.white),
-                                hintText: 'Search '),
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
+                const NavHeader(
+                  userContent: '',
+                  isPage: false,
+                  title: 'Product management',
+                  noCart: false,
                 ),
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Bold(text: "Products", size: 18),
-                          ],
+                            horizontal: 10, vertical: 5),
+                        child: const Bold(text: "Products", size: 18),
+                      ),
+                      Container(
+                        height: 40,
+                        width: MediaQuery.of(context).size.width - 40,
+                        margin: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: Colors.white24),
+                        child: TextField(
+                          onChanged: (value) {
+                            if (value != "") {
+                              isEmpty = false;
+                              setState(() {});
+                            } else {
+                              isEmpty = true;
+                              setState(() {});
+                            }
+                          },
+                          style: const TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(color: Colors.white),
+                              hintText: 'Search '),
                         ),
                       ),
                       SizedBox(
@@ -431,6 +371,24 @@ class _ProductManagementState extends State<ProductManagement> {
                   ),
                 )
               ]);
+      }),
+      floatingActionButton: GetBuilder<ShopController>(builder: (shopContent) {
+        return FloatingActionButton(
+          onPressed: (() => shopContent.shopDetails.isEmpty
+              ? ""
+              : addItem(shopContent.shopDetails[0])),
+          child: shopContent.shopDetails.isEmpty
+              ? const Center(
+                  child: CupertinoActivityIndicator(
+                    color: Colors.blueAccent,
+                    radius: 14,
+                  ),
+                )
+              : const Icon(
+                  CupertinoIcons.add,
+                  color: Colors.white,
+                ),
+        );
       }),
     );
   }

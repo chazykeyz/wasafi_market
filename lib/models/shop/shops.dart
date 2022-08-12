@@ -51,23 +51,23 @@ class Shop {
     required this.link,
   });
 
-  final String id;
-  final User user;
-  final String shopLocation;
-  final List<String> followers;
-  final String shopName;
-  final bool isVerified;
-  final String profilePicture;
-  final List<dynamic> shopThumbnails;
-  final ShopCategory shopCategory;
-  final int income;
-  final int rateValue;
-  final List<dynamic> orders;
-  final List<Product> products;
-  final bool isActive;
-  final int v;
-  final String bio;
-  final String link;
+  String id;
+  User user;
+  String shopLocation;
+  List<String> followers;
+  String shopName;
+  bool isVerified;
+  String profilePicture;
+  List<dynamic> shopThumbnails;
+  ShopCategory shopCategory;
+  int income;
+  int rateValue;
+  List<dynamic> orders;
+  List<Product> products;
+  bool isActive;
+  int v;
+  String bio;
+  String link;
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
         id: json["_id"],
@@ -332,4 +332,25 @@ class Cart {
         "quantity": quantity,
         "_id": id,
       };
+}
+
+class BioUpdate {
+  BioUpdate({required this.bio});
+  String bio;
+
+  Map<String, dynamic> toJson() => {"bio": bio};
+}
+
+class LocationUpdate {
+  LocationUpdate({required this.shopLocation});
+  String shopLocation;
+
+  Map<String, dynamic> toJson() => {"shop_location": shopLocation};
+}
+
+class WebsiteUpdate {
+  WebsiteUpdate({required this.link});
+  String link;
+
+  Map<String, dynamic> toJson() => {"link": link};
 }

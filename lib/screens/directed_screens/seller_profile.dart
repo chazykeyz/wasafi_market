@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/shop.dart';
+import 'package:wasafi_market/controllers/user.dart';
+import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/loads/main_loader.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
@@ -20,11 +22,25 @@ class SellerProfile extends StatefulWidget {
 }
 
 class _SellerProfileState extends State<SellerProfile> {
+  var userId = Get.arguments;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!Get.find<AuthController>().logginUser()) {
+        Get.offAll(() => const SignUp(
+              signDestination: Parent(isFromDetail: true, number: 4),
+            ));
+      } else {
+        Get.find<UserController>().gettingUser();
+
+        Get.find<ShopController>().getShop(userId);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var userId = Get.arguments;
-    Get.find<ShopController>().getShop(userId);
-
     void subscribe(seller) {
       if (!Get.find<AuthController>().logginUser()) {
         Get.to(() => const SignUp(
@@ -78,77 +94,95 @@ class _SellerProfileState extends State<SellerProfile> {
                                                 image: NetworkImage(
                                                     data[0].profilePicture),
                                                 fit: BoxFit.cover)))),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Bold(
-                                                text: data[0]
-                                                    .followers
-                                                    .length
-                                                    .toString(),
-                                                size: 16),
-                                            const Regular(
-                                                text: "   subscribers  ",
-                                                size: 15,
-                                                color: Colors.white54)
-                                          ],
-                                        ),
-                                        Column(
-                                          children: const [
-                                            Bold(text: "567", size: 16),
-                                            Regular(
-                                                text: " Products",
-                                                size: 15,
-                                                color: Colors.white54)
-                                          ],
+                                GetBuilder<UserController>(
+                                    builder: (userContext) {
+                                  return userContext.userList.isEmpty
+                                      ? const SizedBox(
+                                          height: 0,
                                         )
-                                      ],
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        subscribe(data[0]);
-                                      },
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 4, horizontal: 40),
-                                        height: 30,
-                                        width: 160,
-                                        decoration: BoxDecoration(
-                                            color: data[0]
-                                                    .followers
-                                                    .where((item) =>
-                                                        item == data[0].user.id)
-                                                    .isEmpty
-                                                ? Colors.blueAccent
-                                                : Colors.white12,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Center(
-                                          child: shopDetail.subLoading
-                                              ? const CupertinoActivityIndicator()
-                                              : Regular(
-                                                  color: Colors.white,
-                                                  text: data[0]
-                                                          .followers
-                                                          .where((item) =>
-                                                              item ==
-                                                              data[0].user.id)
-                                                          .isEmpty
-                                                      ? "SUBSCRIBE"
-                                                      : 'SUBSCRIBED',
-                                                  size: 13,
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    Bold(
+                                                        text: data[0]
+                                                            .followers
+                                                            .length
+                                                            .toString(),
+                                                        size: 16),
+                                                    const Regular(
+                                                        text:
+                                                            "   subscribers  ",
+                                                        size: 15,
+                                                        color: Colors.white54)
+                                                  ],
                                                 ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                                Column(
+                                                  children: const [
+                                                    Bold(text: "567", size: 16),
+                                                    Regular(
+                                                        text: " Products",
+                                                        size: 15,
+                                                        color: Colors.white54)
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                subscribe(data[0]);
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4,
+                                                        horizontal: 40),
+                                                height: 30,
+                                                width: 160,
+                                                decoration: BoxDecoration(
+                                                    color: data[0]
+                                                            .followers
+                                                            .where((item) =>
+                                                                item ==
+                                                                userContext
+                                                                    .userList[0]
+                                                                    .id)
+                                                            .isEmpty
+                                                        ? Colors.blueAccent
+                                                        : Colors.white12,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Center(
+                                                  child: shopDetail.subLoading
+                                                      ? const CupertinoActivityIndicator()
+                                                      : Regular(
+                                                          color: Colors.white,
+                                                          text: data[0]
+                                                                  .followers
+                                                                  .where((item) =>
+                                                                      item ==
+                                                                      userContext
+                                                                          .userList[
+                                                                              0]
+                                                                          .id)
+                                                                  .isEmpty
+                                                              ? "SUBSCRIBE"
+                                                              : 'SUBSCRIBED',
+                                                          size: 13,
+                                                        ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                })
                               ],
                             ),
                           ),

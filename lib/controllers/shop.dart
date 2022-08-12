@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:wasafi_market/data/repositories/shop.dart';
+import 'package:wasafi_market/models/response.dart';
 import 'package:wasafi_market/models/shop/category.dart';
 import 'package:wasafi_market/models/shop/shop_details.dart';
 import 'package:wasafi_market/models/shop/shops.dart';
@@ -57,6 +58,8 @@ class ShopController extends GetxController implements GetxService {
 
   // getting the shop deatil
   Future<void> getShop(id) async {
+    shopDetails = [];
+    update();
     Response response = await shopRepo.getShop(id);
     if (response.statusCode == 200) {
       shopDetails = [];
@@ -82,5 +85,18 @@ class ShopController extends GetxController implements GetxService {
       _subLoading = false;
       update();
     }
+  }
+
+  //shop update
+  Future<ResponseModel> updateShop(id, shopUpdate) async {
+    late ResponseModel responseModel;
+    Response response = await shopRepo.updateShop(id, shopUpdate);
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "Changes Successful updated!");
+    } else {
+      responseModel = ResponseModel(false, "Changes Failed to updated!");
+    }
+    return responseModel;
   }
 }

@@ -8,6 +8,7 @@ import 'package:wasafi_market/controllers/cart.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/cart/cart.dart';
+import 'package:wasafi_market/models/user/user.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/product_card.dart';
@@ -41,8 +42,8 @@ class _ProductDetailState extends State<ProductDetail> {
       } else {
         Get.find<UserController>().gettingUser();
         setState(() {
-          size = widget.data.size[0].id;
-          _color = widget.data.color[0];
+          size = widget.data.size.isEmpty ? null : widget.data.size[0].id;
+          _color = widget.data.color.isEmpty ? null : widget.data.color[0];
         });
       }
     });
@@ -151,10 +152,36 @@ class _ProductDetailState extends State<ProductDetail> {
                           children: [
                             // title
                             Bold(text: widget.data.name, size: 22),
-                            // share product
+                            // favoute product
                             GestureDetector(
                                 onTap: () {
-                                  Get.back();
+                                  List<String> newList = [];
+                                  newList.add(widget.data.id);
+                                  FavoriteModel favoriteModel =
+                                      FavoriteModel(favorite: newList);
+
+                                  Get.find<UserController>()
+                                      .updateUserInfo(favoriteModel)
+                                      .then((status) {
+                                    if (status.isSuccess) {
+                                      userContent.userList[0].favorite
+                                                  .where((item) =>
+                                                      item.id == widget.data.id)
+                                                  .length ==
+                                              0
+                                          ? showCustomSnackBar(
+                                              "${widget.data.name} has been added to favorite List!",
+                                              title: "Favorite List")
+                                          : showCustomSnackBar(
+                                              "${widget.data.name} has been removed to favorite List!",
+                                              title: "Favorite List");
+                                      Get.find<UserController>().gettingUser();
+                                    } else {
+                                      showCustomSnackBar(
+                                          "${widget.data.name} failed to be added to favorite List!",
+                                          title: "Favorite List");
+                                    }
+                                  });
                                 },
                                 child: Center(
                                   child: Container(
@@ -165,16 +192,25 @@ class _ProductDetailState extends State<ProductDetail> {
                                           borderRadius:
                                               BorderRadius.circular(28),
                                           color: Colors.white24),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(28),
-                                        child: const Icon(
-                                          CupertinoIcons.share,
-                                          color: Colors.white,
-                                        ),
-                                      )),
+                                      child: userContent.userList.isEmpty
+                                          ? const SizedBox(
+                                              height: 0,
+                                            )
+                                          : Icon(
+                                              userContent.userList[0].favorite
+                                                          .where((item) =>
+                                                              item.id ==
+                                                              widget.data.id)
+                                                          .length ==
+                                                      0
+                                                  ? CupertinoIcons.heart
+                                                  : CupertinoIcons.heart_solid,
+                                              color: Colors.white,
+                                            )),
                                 )),
                           ],
                         ),
+                        // descriptions
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Regular(
@@ -182,25 +218,26 @@ class _ProductDetailState extends State<ProductDetail> {
                               size: 16,
                               color: Colors.white),
                         ),
+                        //  price
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Row(
                             children: [
-                              const Bold(text: "Tsh ", size: 20),
                               Bold(
-                                  text: widget.data.price.toString(), size: 20),
+                                  text: "Tsh ${widget.data.price.toString()}",
+                                  size: 20),
                               widget.data.discount != 0
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8.0),
-                                      child:
-                                          Text(widget.data.discount.toString(),
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                                color: Colors.white54,
-                                              )),
+                                      child: Text(
+                                          'Tsh ${widget.data.discount.toString()}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                            color: Colors.white54,
+                                          )),
                                     )
                                   : const Text("")
                             ],

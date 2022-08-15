@@ -4,10 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/shop.dart';
+import 'package:wasafi_market/controllers/user.dart';
+import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/screens/directed_screens/add_items.dart';
 import 'package:wasafi_market/screens/directed_screens/editing_items.dart';
+import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
@@ -21,13 +25,28 @@ class ProductManagement extends StatefulWidget {
 
 class _ProductManagementState extends State<ProductManagement> {
   bool isEmpty = true;
+  dynamic shopId = Get.arguments;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (!Get.find<AuthController>().logginUser()) {
+        Get.offAll(() => const SignUp(
+              signDestination: Parent(
+                isFromDetail: true,
+                number: 0,
+              ),
+            ));
+      } else {
+        Get.find<UserController>().gettingUser();
+        Get.find<ShopController>().getShop(shopId.id);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    dynamic shopId = Get.arguments;
-
-    Get.find<ShopController>().getShop(shopId.id);
-
     void addItem(content) {
       showModalBottomSheet(
           backgroundColor: Colors.transparent,

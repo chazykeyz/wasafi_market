@@ -43,19 +43,21 @@ class Subscription extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(15),
                                   color:
                                       const Color.fromARGB(31, 255, 255, 255),
-                                  image: const DecorationImage(
-                                      image: NetworkImage(
-                                          "https://images.unsplash.com/photo-1609708993734-29d07306bdc7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"),
+                                  image: DecorationImage(
+                                      image: NetworkImage(userInfo
+                                          .subscriptions[index].profilePicture),
                                       fit: BoxFit.cover))),
-                          title: const Bold(text: "Chazy keyz", size: 16),
-                          subtitle: const Regular(
-                              text: "Accessories",
+                          title: Bold(
+                              text: userInfo.subscriptions[index].shopName,
+                              size: 16),
+                          subtitle: Regular(
+                              text: userInfo.subscriptions[index].shopLocation,
                               size: 14,
                               color: Colors.white70),
                           trailing: GestureDetector(
                             onTap: () {
                               Get.to(() => const SellerProfile(),
-                                  arguments: userInfo.subscriptions[index]);
+                                  arguments: userInfo.subscriptions[index].id);
                             },
                             child: const Regular(
                                 text: 'See More',

@@ -51,4 +51,16 @@ class UserController extends GetxController implements GetxService {
   Future<void> readNotification() async {
     await userRepo.readNotification();
   }
+
+  Future<ResponseModel> updateUserInfo(FavoriteModel newInfo) async {
+    late ResponseModel responseModel;
+    Response response = await userRepo.updateUserInfo(newInfo);
+
+    if (response.statusCode == 200) {
+      responseModel = ResponseModel(true, "success");
+    } else {
+      responseModel = ResponseModel(false, "failed");
+    }
+    return responseModel;
+  }
 }

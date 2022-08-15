@@ -2,6 +2,7 @@ import 'package:get/get_connect.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wasafi_market/constant.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
+import 'package:wasafi_market/models/user/user.dart';
 import 'package:wasafi_market/models/user/username.dart';
 
 class UserRepo {
@@ -20,5 +21,10 @@ class UserRepo {
 
   Future<Response> readNotification() async {
     return await apiClient.postData(AppConstant.READ_NOTIFICATION, "");
+  }
+
+  Future<Response> updateUserInfo(FavoriteModel newInfo) async {
+    return await apiClient.updateData(
+        AppConstant.UPDATE_USER_FAVORITE, newInfo.toJson());
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 Products productsFromJson(String str) => Products.fromJson(json.decode(str));
 
 String productsToJson(Products data) => json.encode(data.toJson());
@@ -56,13 +58,13 @@ class ProductsProduct {
   Category category;
   SubCategory subCategory;
   Seller seller;
-  List<dynamic> thumbnail;
+  List<String> thumbnail;
   int price;
   int stockCount;
   int remainedStock;
   bool isAvailable;
-  List<dynamic> size;
-  List<dynamic> color;
+  List<Size> size;
+  List<Color> color;
   int discount;
   String description;
   int rateValue;
@@ -77,13 +79,20 @@ class ProductsProduct {
         category: Category.fromJson(json["category"]),
         subCategory: SubCategory.fromJson(json["subCategory"]),
         seller: Seller.fromJson(json["seller"]),
-        thumbnail: List<dynamic>.from(json["thumbnail"].map((x) => x)),
+        thumbnail: List<String>.from(json["thumbnail"].map((x) => x)),
         price: json["price"],
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<dynamic>.from(json["size"].map((x) => x)),
-        color: List<dynamic>.from(json["color"].map((x) => x)),
+        size: List<Size>.from(json["size"].map((x) => Size.fromJson(x))),
+        color: List<Color>.from(json["color"].map((x) {
+          String colorString = x.toString(); //
+          String valueString =
+              colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+          int value = int.parse(valueString, radix: 16);
+          Color otherColor = Color(value);
+          return otherColor;
+        })),
         discount: json["discount"],
         description: json["description"],
         rateValue: json["rate_value"],
@@ -103,7 +112,7 @@ class ProductsProduct {
         "stock_count": stockCount,
         "remained_stock": remainedStock,
         "is_available": isAvailable,
-        "size": List<dynamic>.from(size.map((x) => x)),
+        "size": List<dynamic>.from(size.map((x) => x.toJson())),
         "color": List<dynamic>.from(color.map((x) => x)),
         "discount": discount,
         "description": description,
@@ -255,13 +264,13 @@ class SellerProduct {
   String category;
   String subCategory;
   String seller;
-  List<dynamic> thumbnail;
+  List<String> thumbnail;
   int price;
   int stockCount;
   int remainedStock;
   bool isAvailable;
-  List<dynamic> size;
-  List<dynamic> color;
+  List<String> size;
+  List<String> color;
   int discount;
   String description;
   int rateValue;
@@ -275,13 +284,13 @@ class SellerProduct {
         category: json["category"],
         subCategory: json["subCategory"],
         seller: json["seller"],
-        thumbnail: List<dynamic>.from(json["thumbnail"].map((x) => x)),
+        thumbnail: List<String>.from(json["thumbnail"].map((x) => x)),
         price: json["price"],
         stockCount: json["stock_count"],
         remainedStock: json["remained_stock"],
         isAvailable: json["is_available"],
-        size: List<dynamic>.from(json["size"].map((x) => x)),
-        color: List<dynamic>.from(json["color"].map((x) => x)),
+        size: List<String>.from(json["size"].map((x) => x)),
+        color: List<String>.from(json["color"].map((x) => x)),
         discount: json["discount"],
         description: json["description"],
         rateValue: json["rate_value"],
@@ -340,11 +349,11 @@ class User {
   bool isFullRegistered;
   List<dynamic> searches;
   List<dynamic> favorite;
-  List<dynamic> subscriptions;
+  List<String> subscriptions;
   DateTime createdAt;
   DateTime updatedAt;
   int v;
-  List<Cart> cart;
+  List<dynamic> cart;
   List<String> notification;
   int wallet;
   List<dynamic> order;
@@ -358,11 +367,11 @@ class User {
         isFullRegistered: json["is_full_registered"],
         searches: List<dynamic>.from(json["searches"].map((x) => x)),
         favorite: List<dynamic>.from(json["favorite"].map((x) => x)),
-        subscriptions: List<dynamic>.from(json["subscriptions"].map((x) => x)),
+        subscriptions: List<String>.from(json["subscriptions"].map((x) => x)),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
-        cart: List<Cart>.from(json["cart"].map((x) => Cart.fromJson(x))),
+        cart: List<dynamic>.from(json["cart"].map((x) => x)),
         notification: List<String>.from(json["notification"].map((x) => x)),
         wallet: json["wallet"],
         order: List<dynamic>.from(json["order"].map((x) => x)),
@@ -381,50 +390,34 @@ class User {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
-        "cart": List<dynamic>.from(cart.map((x) => x.toJson())),
+        "cart": List<dynamic>.from(cart.map((x) => x)),
         "notification": List<dynamic>.from(notification.map((x) => x)),
         "wallet": wallet,
         "order": List<dynamic>.from(order.map((x) => x)),
       };
 }
 
-class Cart {
-  Cart({
-    required this.product,
-    required this.quantity,
-    required this.productPrice,
-    required this.totalProductPrice,
-    required this.color,
-    required this.size,
+class Size {
+  Size({
     required this.id,
+    required this.size,
+    required this.v,
   });
 
-  dynamic product;
-  int quantity;
-  int productPrice;
-  int totalProductPrice;
-  String color;
-  String size;
   String id;
+  String size;
+  int v;
 
-  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        product: json["product"],
-        quantity: json["quantity"],
-        productPrice: json["product_price"],
-        totalProductPrice: json["total_product_price"],
-        color: json["color"],
-        size: json["size"],
+  factory Size.fromJson(Map<String, dynamic> json) => Size(
         id: json["_id"],
+        size: json["size"],
+        v: json["__v"],
       );
 
   Map<String, dynamic> toJson() => {
-        "product": product,
-        "quantity": quantity,
-        "product_price": productPrice,
-        "total_product_price": totalProductPrice,
-        "color": color,
-        "size": size,
         "_id": id,
+        "size": size,
+        "__v": v,
       };
 }
 

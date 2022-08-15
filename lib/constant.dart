@@ -45,6 +45,7 @@ class AppConstant {
   // users
   static const String SINGLE_USER = "api/users/me";
   static const String SINGLE_UPDATE_USER = "api/users/update";
+  static const String UPDATE_USER_FAVORITE = "api/users/update-favorite";
   // notification
   static const String READ_NOTIFICATION = "api/notifications/read";
 }

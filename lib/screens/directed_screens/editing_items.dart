@@ -40,23 +40,13 @@ class _EditingItemsState extends State<EditingItems> {
   final List _sizeList = [];
   final List<Color> _colorList = [];
   // form inputs
-  int _discount = 0;
-  String _name = '';
-  int _price = 0;
-  int _stockCount = 0;
-  String _description = '';
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      _discount = widget.product.discount;
-      _name = widget.product.name;
-      _price = widget.product.price;
-      _stockCount = widget.product.stockCount;
-      _description = widget.product.description;
       if (widget.product.discount != 0) {
-        _switchValue = false;
+        _switchValue = true;
       }
 // adding size
       if (widget.product.size.isNotEmpty) {
@@ -68,14 +58,26 @@ class _EditingItemsState extends State<EditingItems> {
         _colorValue = true;
         _colorList.addAll(widget.product.color);
       }
+      // runnig controllers
+      Get.find<ProductsController>().getSizes();
+      Get.find<ProductCategoryController>().getProductCategory();
+      Get.find<ShopController>().getShops();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Get.find<ProductsController>().getSizes();
-    Get.find<ProductCategoryController>().getProductCategory();
-    Get.find<ShopController>().getShops();
+    TextEditingController priceController =
+        TextEditingController(text: widget.product.price.toString());
+    TextEditingController nameController =
+        TextEditingController(text: widget.product.name);
+    TextEditingController stockCountController =
+        TextEditingController(text: widget.product.stockCount.toString());
+    TextEditingController detailsController =
+        TextEditingController(text: widget.product.description);
+    TextEditingController discountController =
+        TextEditingController(text: widget.product.discount.toString());
+
 // final fucntion to submit
     void sendProduct(_seller) {
       // color to string
@@ -90,25 +92,32 @@ class _EditingItemsState extends State<EditingItems> {
       }
       // dicount
       if (_switchValue == false) {
-        _discount = 0;
+        discountController.text = "0";
       }
 
-      ProductEdit productEdit = ProductEdit(_sizeList, colorString, _discount,
-          _name, _price, _stockCount, _description, _seller);
+      ProductEdit productEdit = ProductEdit(
+          _sizeList,
+          colorString,
+          int.parse(discountController.text),
+          nameController.text,
+          int.parse(priceController.text),
+          int.parse(stockCountController.text),
+          detailsController.text,
+          _seller);
 
-      if (_name == '') {
+      if (nameController.text == '') {
         showCustomSnackBar(
             "field name can't be empty, please assign product's name",
             title: "Product Name");
-      } else if (_price == 0) {
+      } else if (priceController.text == '') {
         showCustomSnackBar(
             "field price can't be empty, please assign product's price",
             title: "Product price");
-      } else if (_stockCount == 0) {
+      } else if (stockCountController.text == '') {
         showCustomSnackBar(
             "field stock count can't be empty, please assign product's stock count",
             title: "Product stock count");
-      } else if (_description == "") {
+      } else if (detailsController.text == "") {
         showCustomSnackBar(
             "field details can't be empty, please assign product's details",
             title: "Product details");
@@ -230,11 +239,7 @@ class _EditingItemsState extends State<EditingItems> {
                                       vertical: 5, horizontal: 10),
                                   width: MediaQuery.of(context).size.width - 20,
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _name = value;
-                                      });
-                                    },
+                                    controller: nameController,
                                     keyboardAppearance: Brightness.dark,
                                     maxLines: 1,
                                     maxLength: 40,
@@ -262,11 +267,7 @@ class _EditingItemsState extends State<EditingItems> {
                                       vertical: 5, horizontal: 10),
                                   width: MediaQuery.of(context).size.width - 20,
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _price = int.parse(value);
-                                      });
-                                    },
+                                    controller: priceController,
                                     style: const TextStyle(color: Colors.white),
                                     keyboardAppearance: Brightness.dark,
                                     keyboardType: TextInputType.number,
@@ -294,11 +295,7 @@ class _EditingItemsState extends State<EditingItems> {
                                       vertical: 5, horizontal: 10),
                                   width: MediaQuery.of(context).size.width - 20,
                                   child: TextField(
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _stockCount = int.parse(value);
-                                      });
-                                    },
+                                    controller: stockCountController,
                                     style: const TextStyle(color: Colors.white),
                                     keyboardAppearance: Brightness.dark,
                                     keyboardType: TextInputType.number,
@@ -313,40 +310,31 @@ class _EditingItemsState extends State<EditingItems> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(color: Colors.white12),
+                                  ),
+                                ),
                                 margin: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 2),
-                                child: InkWell(
-                                  onTap: () {
-                                    detailSheet();
-                                  },
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: const [
-                                            Regular(
-                                              text: "Product Details",
-                                              size: 15,
-                                              color: Colors.white70,
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: const [
-                                            Icon(
-                                              CupertinoIcons.chevron_right,
-                                              color: Colors.white60,
-                                              size: 20,
-                                            ),
-                                          ],
-                                        )
-                                      ]),
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  width: MediaQuery.of(context).size.width - 20,
+                                  child: TextField(
+                                    style:
+                                        const TextStyle(color: Colors.white70),
+                                    controller: detailsController,
+                                    autofocus: true,
+                                    maxLines: 3,
+                                    minLines: 1,
+                                    keyboardAppearance: Brightness.dark,
+                                    decoration: const InputDecoration(
+                                        hintText: "Add product Detail",
+                                        border: InputBorder.none,
+                                        hintStyle:
+                                            TextStyle(color: Colors.blue)),
+                                  ),
                                 ),
                               ),
                             ],
@@ -431,11 +419,7 @@ class _EditingItemsState extends State<EditingItems> {
                                                   .width -
                                               20,
                                           child: TextField(
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _discount = int.parse(value);
-                                              });
-                                            },
+                                            controller: discountController,
                                             style: const TextStyle(
                                                 color: Colors.white),
                                             keyboardType: TextInputType.number,
@@ -831,7 +815,7 @@ class _EditingItemsState extends State<EditingItems> {
   }
 
 // description sheet
-  void detailSheet() {
+  void detailSheet(controller) {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         isScrollControlled: true,
@@ -880,11 +864,7 @@ class _EditingItemsState extends State<EditingItems> {
                   Expanded(
                     child: TextField(
                       style: const TextStyle(color: Colors.white70),
-                      onChanged: (value) {
-                        setState(() {
-                          _description = value;
-                        });
-                      },
+                      controller: controller,
                       autofocus: true,
                       maxLines: null,
                       minLines: null,

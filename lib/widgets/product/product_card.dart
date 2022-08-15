@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/screens/directed_screens/product_detail.dart';
+import 'package:wasafi_market/screens/directed_screens/product/product_detail.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
@@ -19,6 +19,7 @@ class ProductCard extends StatelessWidget {
       onTap: () {
         Get.to(() => ProductDetail(
               data: data,
+              isWishList: false,
             ));
       },
       child: Container(

@@ -10,12 +10,11 @@ import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/auth/password.dart';
 import 'package:wasafi_market/models/shop/shops.dart';
 import 'package:wasafi_market/models/user/username.dart';
-import 'package:wasafi_market/screens/directed_screens/add_product.dart';
-import 'package:wasafi_market/screens/directed_screens/customers.dart';
-import 'package:wasafi_market/screens/directed_screens/favorite.dart';
-import 'package:wasafi_market/screens/directed_screens/order.dart';
-import 'package:wasafi_market/screens/navigation_screens/notification.dart';
-import 'package:wasafi_market/screens/directed_screens/subscription.dart';
+import 'package:wasafi_market/screens/directed_screens/product/add_product.dart';
+import 'package:wasafi_market/screens/directed_screens/user/customers.dart';
+import 'package:wasafi_market/screens/directed_screens/user/favorite.dart';
+import 'package:wasafi_market/screens/directed_screens/order/order.dart';
+import 'package:wasafi_market/screens/directed_screens/user/subscription.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
@@ -885,14 +884,6 @@ class _AccountState extends State<Account> {
                                                 ],
                                               ),
                                               GestureDetector(
-                                                onTap: () {
-                                                  Get.to(
-                                                      () =>
-                                                          const Notifications(),
-                                                      arguments: userContent
-                                                          .userList[0]
-                                                          .notification);
-                                                },
                                                 child: const Icon(
                                                   CupertinoIcons.chevron_right,
                                                   color: Colors.white54,

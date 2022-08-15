@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/widgets/product_short_card.dart';
-import 'package:wasafi_market/screens/directed_screens/search_history.dart';
+import 'package:wasafi_market/widgets/product/product_short_card.dart';
+import 'package:wasafi_market/screens/directed_screens/user/search_history.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 

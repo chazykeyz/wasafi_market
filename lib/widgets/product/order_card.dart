@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/screens/directed_screens/order_list.dart';
+import 'package:wasafi_market/screens/directed_screens/order/order_list.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 

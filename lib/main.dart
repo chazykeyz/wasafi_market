@@ -10,9 +10,9 @@ import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/screens/navigation_screens/account.dart';
 import 'package:wasafi_market/screens/navigation_screens/cart.dart';
+import 'package:wasafi_market/screens/navigation_screens/events.dart';
 import 'package:wasafi_market/screens/navigation_screens/explore.dart';
 import 'package:wasafi_market/screens/navigation_screens/home.dart';
-import 'package:wasafi_market/screens/navigation_screens/notification.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 import 'helper/dependencies.dart' as dep;
 
@@ -86,7 +86,7 @@ class _ParentState extends State<Parent> {
     Home(),
     Explore(),
     Cart(),
-    Notifications(),
+    Events(),
     Account(),
   ];
 
@@ -177,7 +177,7 @@ class _ParentState extends State<Parent> {
                           icon: SizedBox(
                             width: 40,
                             child: Column(children: [
-                              const Icon(CupertinoIcons.bell),
+                              const Icon(Ionicons.calendar_clear_outline),
                               userContent.userList.isEmpty
                                   ? const SizedBox(
                                       height: 0,
@@ -202,8 +202,8 @@ class _ParentState extends State<Parent> {
                                         )
                             ]),
                           ),
-                          activeIcon: const Icon(CupertinoIcons.bell_solid),
-                          label: "Notification",
+                          activeIcon: const Icon(Ionicons.calendar),
+                          label: "Events",
                         ),
                         BottomNavigationBarItem(
                           backgroundColor: Colors.black.withOpacity(.6),

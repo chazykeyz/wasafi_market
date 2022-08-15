@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
-import 'package:wasafi_market/widgets/product_short_card.dart';
+import 'package:wasafi_market/widgets/product/product_short_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wasafi_market/screens/directed_screens/seller_profile.dart';
+import 'package:wasafi_market/screens/directed_screens/user/seller_profile.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 
 class Seller extends StatelessWidget {

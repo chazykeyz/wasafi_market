@@ -5,20 +5,24 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/cart.dart';
+import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/cart/cart.dart';
 import 'package:wasafi_market/models/user/user.dart';
+import 'package:wasafi_market/screens/directed_screens/user/seller_profile.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
-import 'package:wasafi_market/widgets/product_card.dart';
+import 'package:wasafi_market/widgets/product/product_card.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({Key? key, required this.data}) : super(key: key);
+  const ProductDetail({Key? key, required this.data, required this.isWishList})
+      : super(key: key);
   final dynamic data;
+  final bool isWishList;
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -140,6 +144,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ),
                 ),
+
                 // upper side of ui the title of product and share button
                 SliverToBoxAdapter(
                   child: Padding(
@@ -147,6 +152,78 @@ class _ProductDetailState extends State<ProductDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            height: .5,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.white24,
+                          ),
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: [
+                                Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: const Color.fromARGB(
+                                            31, 255, 255, 255),
+                                        image: DecorationImage(
+                                            image: NetworkImage(widget
+                                                .data.seller.profilePicture),
+                                            fit: BoxFit.cover))),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => const SellerProfile(),
+                                        arguments: widget.data.seller.id);
+                                  },
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                              text: widget.data.seller.shopName,
+                                              size: 14,
+                                              color: Colors.white),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Regular(
+                                              text: widget
+                                                  .data.seller.shopLocation,
+                                              size: 12,
+                                              color: Colors.blue),
+                                        ),
+                                      ]),
+                                )
+                              ]),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => const SellerProfile(),
+                                      arguments: widget.data.seller.id);
+                                },
+                                child: const Icon(
+                                  CupertinoIcons.chevron_right,
+                                  color: Colors.blue,
+                                  size: 20,
+                                ),
+                              )
+                            ]),
+                        Center(
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            height: .5,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.white24,
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -397,6 +474,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               ]),
                         ),
                 ),
+                //  ADDING TO CART
                 SliverToBoxAdapter(
                   child: Container(
                     decoration: BoxDecoration(
@@ -533,98 +611,72 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(children: [
-                                    Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            color: const Color.fromARGB(
-                                                31, 255, 255, 255),
-                                            image: DecorationImage(
-                                                image: NetworkImage(widget.data
-                                                    .seller.profilePicture),
-                                                fit: BoxFit.cover))),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Regular(
-                                          text:
-                                              widget.data.seller.user.username,
-                                          size: 14,
-                                          color: Colors.white),
-                                    )
-                                  ]),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // Get.to(() => more);
-                                    },
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [
-                                        Regular(
-                                          text: "See More ",
-                                          color: Colors.blue,
-                                          size: 14,
+                // RELATED
+                !widget.isWishList
+                    ? GetBuilder<ProductsController>(builder: (productContent) {
+                        var related = productContent.productList
+                            .where((item) =>
+                                item.category.id == widget.data.category.id &&
+                                item.id != widget.data.id)
+                            .toList();
+
+                        return SliverToBoxAdapter(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    height: .5,
+                                    width: MediaQuery.of(context).size.width,
+                                    color: Colors.white24,
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child:
+                                              Bold(text: "Related", size: 16),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.chevron_right,
-                                          color: Colors.blue,
-                                          size: 20,
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Get.to(() => more);
+                                          },
+                                          child: const Regular(
+                                            text: "See All",
+                                            color: Colors.blue,
+                                            size: 14,
+                                          ),
                                         )
-                                      ],
-                                    ),
-                                  )
-                                ]),
-                          ),
-                          SizedBox(
-                            height: 230,
-                            child: ListView.builder(
-                                itemCount: widget.data.seller.products.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (BuildContext context, index) {
-                                  return ProductCard(
-                                    isFlash: 0,
-                                    data: widget.data.seller.products[index],
-                                  );
-                                }),
-                          ),
-                        ]),
-                  ),
-                ),
-                // // SliverToBoxAdapter(
-                //   child:
-                //       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                //     const TextTile(
-                //       more: CategoryDetail(),
-                //       title: "Related",
-                //     ),
-                //     SizedBox(
-                //       height: 230,
-                //       child: ListView.builder(
-                //           itemCount: 6,
-                //           scrollDirection: Axis.horizontal,
-                //           itemBuilder: (BuildContext context, index) {
-                //             return const ProductCard(isFlash: 0, data: {});
-                //           }),
-                //     ),
-                //   ]),
-                // )
+                                      ]),
+                                ),
+                                SizedBox(
+                                  height: 230,
+                                  child: ListView.builder(
+                                      itemCount: related.length,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return ProductCard(
+                                            isFlash: 0, data: related[index]);
+                                      }),
+                                ),
+                              ]),
+                        );
+                      })
+                    : const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 0,
+                        ),
+                      )
               ]);
       }),
     );

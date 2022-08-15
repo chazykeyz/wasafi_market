@@ -5,7 +5,7 @@ import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/user/user.dart';
-import 'package:wasafi_market/screens/directed_screens/product_detail.dart';
+import 'package:wasafi_market/screens/directed_screens/product/product_detail.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';
@@ -86,9 +86,11 @@ class _FavoriteState extends State<Favorite> {
                                                 child: InkWell(
                                                   onTap: () {
                                                     Get.to(() => ProductDetail(
-                                                        data: userContent
-                                                            .userList[0]
-                                                            .favorite[index]));
+                                                          data: userContent
+                                                              .userList[0]
+                                                              .favorite[index],
+                                                          isWishList: true,
+                                                        ));
                                                   },
                                                   child: ListTile(
                                                     leading: Container(

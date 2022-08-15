@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
-import 'package:wasafi_market/widgets/product_card.dart';
+import 'package:wasafi_market/widgets/product/product_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 

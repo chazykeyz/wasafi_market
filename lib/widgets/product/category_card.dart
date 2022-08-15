@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/products.dart';
-import 'package:wasafi_market/screens/directed_screens/category.dart';
+import 'package:wasafi_market/screens/directed_screens/product/category.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class CatergoryCard extends StatelessWidget {

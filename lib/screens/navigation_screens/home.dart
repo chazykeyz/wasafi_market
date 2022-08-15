@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
-import 'package:wasafi_market/screens/directed_screens/category.dart';
-import 'package:wasafi_market/widgets/category_card.dart';
+import 'package:wasafi_market/screens/directed_screens/product/category.dart';
+import 'package:wasafi_market/widgets/product/category_card.dart';
 import 'package:wasafi_market/widgets/loads/main_loader.dart';
 import 'package:wasafi_market/widgets/loads/product.dart';
-import 'package:wasafi_market/widgets/product_card.dart';
+import 'package:wasafi_market/widgets/product/product_card.dart';
 import 'package:wasafi_market/widgets/stories_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 

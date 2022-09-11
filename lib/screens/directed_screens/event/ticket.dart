@@ -29,6 +29,16 @@ class _TicketState extends State<Ticket> {
             title: 'Event Ticket',
             noCart: false,
           ),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Regular(
+                color: Colors.white,
+                text: "TICKET ID: MnklvGUGbls9876",
+                size: 14,
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Stack(
               children: [
@@ -80,7 +90,7 @@ class _TicketState extends State<Ticket> {
                                     height: 50,
                                     width: 50,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(18),
+                                        borderRadius: BorderRadius.circular(25),
                                         color: Colors.white24),
                                     child: const Icon(
                                       CupertinoIcons.person,
@@ -206,7 +216,7 @@ class _TicketState extends State<Ticket> {
                               text:
                                   "---------------------------------------------",
                               size: 16,
-                              color: Colors.black),
+                              color: Colors.black38),
                           Container(
                             height: 30,
                             width: 30,
@@ -235,7 +245,7 @@ class _TicketState extends State<Ticket> {
                               text:
                                   "---------------------------------------------",
                               size: 16,
-                              color: Colors.black),
+                              color: Colors.black38),
                           Container(
                             height: 30,
                             width: 30,

@@ -8,7 +8,7 @@ import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/screens/directed_screens/order/checkout.dart';
-import 'package:wasafi_market/screens/directed_screens/product/product_detail.dart';
+import 'package:wasafi_market/screens/directed_screens/product/details.dart';
 import 'package:wasafi_market/screens/free_screens/signup.dart';
 import 'package:wasafi_market/widgets/nav_header.dart';
 import 'package:wasafi_market/widgets/show_snackbar.dart';

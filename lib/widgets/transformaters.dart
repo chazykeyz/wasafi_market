@@ -1,4 +1,8 @@
-import 'dart:math' as math;
+// ignore: library_prefixes
+// ignore_for_file: constant_identifier_names
+
+// ignore: library_prefixes
+import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
@@ -11,6 +15,7 @@ final transformers = [
   ZoomInPageTransformer(),
   ZoomOutPageTransformer(),
   DeepthPageTransformer(),
+  ScaleAndFadeTransformer(),
 ];
 
 class AccordionTransformer extends PageTransformer {
@@ -54,7 +59,7 @@ class ThreeDTransformer extends PageTransformer {
 }
 
 class ZoomInPageTransformer extends PageTransformer {
-  static const double zoomMax = 0.5;
+  static const double ZOOM_MAX = 0.5;
   @override
   Widget transform(Widget child, TransformInfo info) {
     double position = info.position;
@@ -73,8 +78,8 @@ class ZoomInPageTransformer extends PageTransformer {
 }
 
 class ZoomOutPageTransformer extends PageTransformer {
-  static const double minScale = 0.85;
-  static const double minAlpha = 0.5;
+  static const double MIN_SCALE = 0.85;
+  static const double MIN_ALPHA = 0.5;
 
   @override
   Widget transform(Widget child, TransformInfo info) {
@@ -90,7 +95,7 @@ class ZoomOutPageTransformer extends PageTransformer {
       // [-1,1]
       // Modify the default slide transition to
       // shrink the page as well
-      double scaleFactor = math.max(minScale, 1 - position.abs());
+      double scaleFactor = Math.max(MIN_SCALE, 1 - position.abs());
       double vertMargin = pageHeight * (1 - scaleFactor) / 2;
       double horzMargin = pageWidth * (1 - scaleFactor) / 2;
       double dx;
@@ -99,9 +104,9 @@ class ZoomOutPageTransformer extends PageTransformer {
       } else {
         dx = (-horzMargin + vertMargin / 2);
       }
-      // Scale the page down (between minScale and 1)
-      double opacity =
-          minAlpha + (scaleFactor - minScale) / (1 - minScale) * (1 - minAlpha);
+      // Scale the page down (between MIN_SCALE and 1)
+      double opacity = MIN_ALPHA +
+          (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 - MIN_ALPHA);
 
       return Opacity(
         opacity: opacity,
@@ -141,9 +146,9 @@ class DeepthPageTransformer extends PageTransformer {
         ),
       );
     } else if (position <= 1) {
-      const double minScale = 0.75;
-      // Scale the page down (between minScale and 1)
-      double scaleFactor = minScale + (1 - minScale) * (1 - position);
+      const double MIN_SCALE = 0.75;
+      // Scale the page down (between MIN_SCALE and 1)
+      double scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - position);
 
       return Opacity(
         opacity: 1.0 - position,
@@ -159,5 +164,31 @@ class DeepthPageTransformer extends PageTransformer {
     }
 
     return child;
+  }
+}
+
+class ScaleAndFadeTransformer extends PageTransformer {
+  final double _scale;
+  final double _fade;
+
+  ScaleAndFadeTransformer({double fade = 0.3, double scale = 0.8})
+      : _fade = fade,
+        _scale = scale;
+
+  @override
+  // ignore: avoid_renaming_method_parameters
+  Widget transform(Widget item, TransformInfo info) {
+    double position = info.position;
+    double scaleFactor = (1 - position.abs()) * (1 - _scale);
+    double fadeFactor = (1 - position.abs()) * (1 - _fade);
+    double opacity = _fade + fadeFactor;
+    double scale = _scale + scaleFactor;
+    return Opacity(
+      opacity: opacity,
+      child: Transform.scale(
+        scale: scale,
+        child: item,
+      ),
+    );
   }
 }

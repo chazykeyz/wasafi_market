@@ -10,8 +10,10 @@ class TextTile extends StatelessWidget {
     required this.title,
     required this.more,
     required this.isGradient,
+    required this.argument,
   }) : super(key: key);
   final String title;
+  final dynamic argument;
   final Widget more;
   final bool isGradient;
 
@@ -41,7 +43,7 @@ class TextTile extends StatelessWidget {
                     )),
           GestureDetector(
             onTap: () {
-              Get.to(() => more);
+              Get.to(() => more, arguments: argument);
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 15),

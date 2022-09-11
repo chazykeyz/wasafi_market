@@ -4,13 +4,23 @@ import 'package:wasafi_market/widgets/stories_detail.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
 
 class Status extends StatelessWidget {
-  const Status({Key? key}) : super(key: key);
+  const Status(
+      {Key? key,
+      required this.data,
+      required this.allData,
+      required this.index})
+      : super(key: key);
+  final dynamic data;
+  final dynamic allData;
+  final dynamic index;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(() => const Story());
+        Get.to(() => const Story(),
+            arguments: [data, allData, index],
+            transition: Transition.cupertinoDialog);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 3),
@@ -22,10 +32,11 @@ class Status extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: Stack(
             children: [
-              const Image(
+              Image(
                 width: 130,
+                height: 200,
                 image: NetworkImage(
-                    "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2786&q=80"),
+                    data.storyInstance[data.storyInstance.length - 1].media),
                 fit: BoxFit.cover,
               ),
               Positioned(
@@ -34,46 +45,56 @@ class Status extends StatelessWidget {
                 left: 0,
                 top: 0,
                 child: Container(
+                  height: 200,
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                        Color.fromARGB(206, 0, 0, 0),
-                        Color.fromARGB(0, 0, 0, 0)
+                        Color.fromARGB(255, 0, 0, 0),
+                        Color.fromARGB(0, 0, 0, 200)
                       ])),
                   child: Center(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Container(
-                            height: 60,
-                            width: 60,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                    width: 2, color: Colors.redAccent),
-                                color: Colors.white),
-                            child: Center(
+                          Center(
+                            child: Container(
+                              height: 55,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color:
+                                      const Color.fromARGB(91, 255, 255, 255)),
                               child: Container(
-                                  height: 50,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: const Color.fromARGB(
-                                        255, 238, 237, 237),
-                                    image: const DecorationImage(
-                                        image: NetworkImage(
-                                            "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"),
-                                        fit: BoxFit.cover),
-                                  )),
+                                margin: const EdgeInsets.all(5),
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: Colors.white),
+                                child: Center(
+                                  child: Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: const Color.fromARGB(
+                                            255, 238, 237, 237),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                data.user.profilePicture),
+                                            fit: BoxFit.cover),
+                                      )),
+                                ),
+                              ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 4.0, bottom: 8),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0, bottom: 8),
                             child: Center(
                               child: Regular(
-                                text: "chazy keyz",
+                                text: data.user.shopName,
                                 size: 12,
                                 color: Colors.white,
                               ),

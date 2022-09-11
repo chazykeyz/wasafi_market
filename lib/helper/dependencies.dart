@@ -7,6 +7,7 @@ import 'package:wasafi_market/controllers/order.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/shop.dart';
+import 'package:wasafi_market/controllers/stories.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/controllers/verification.dart';
 import 'package:wasafi_market/data/api/api_client.dart';
@@ -15,6 +16,7 @@ import 'package:wasafi_market/data/repositories/cart.dart';
 import 'package:wasafi_market/data/repositories/product_category.dart';
 import 'package:wasafi_market/data/repositories/products.dart';
 import 'package:wasafi_market/data/repositories/shop.dart';
+import 'package:wasafi_market/data/repositories/stories.dart';
 import 'package:wasafi_market/data/repositories/user.dart';
 import 'package:wasafi_market/data/repositories/verification.dart';
 
@@ -38,6 +40,7 @@ Future<void> init() async {
       () => CartRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
   Get.lazyPut(
       () => UserRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
+  Get.lazyPut(() => StoriesRepo(apiClient: Get.find()));
 
   // CONTROLLERS
   Get.lazyPut(() => AuthController(authRepo: Get.find()));
@@ -48,4 +51,5 @@ Future<void> init() async {
   Get.lazyPut(() => CartController(cartRepo: Get.find()));
   Get.lazyPut(() => UserController(userRepo: Get.find()));
   Get.lazyPut(() => OrderController());
+  Get.lazyPut(() => StoriesController(storiesRepo: Get.find()));
 }

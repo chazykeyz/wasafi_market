@@ -6,7 +6,7 @@ class AppConstant {
 
   static const String MAP_KEY =
       "pk.eyJ1IjoiY2hhenlrZXl6IiwiYSI6ImNsMjRsOXY5YzA5OXEzZHFpaDFuZHBheXEifQ.IrMMd7lfJiqEfAgzIGovDQ";
-  static const String BASEURI = "http://192.168.100.54:3000/";
+  static const String BASEURI = "http://192.168.100.16:3000/";
   static const String SIGNUP = "api/auth/register/";
   static const String VERIFY = "api/auth/verify/";
   static const String GET_REFRESH_TOKEN = "api/auth/jwt-refresh-token/";
@@ -48,4 +48,7 @@ class AppConstant {
   static const String UPDATE_USER_FAVORITE = "api/users/update-favorite";
   // notification
   static const String READ_NOTIFICATION = "api/notifications/read";
+
+  // stories
+  static const String STORIES = "api/stories/all";
 }

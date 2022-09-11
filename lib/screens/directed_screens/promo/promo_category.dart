@@ -6,8 +6,8 @@ import 'package:wasafi_market/widgets/loads/main_loader.dart';
 import 'package:wasafi_market/widgets/product/product_card.dart';
 import 'package:wasafi_market/widgets/text/bold.dart';
 
-class CategoryDetail extends StatelessWidget {
-  const CategoryDetail({Key? key}) : super(key: key);
+class PromoCategory extends StatelessWidget {
+  const PromoCategory({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,8 @@ class CategoryDetail extends StatelessWidget {
                       Image(
                         width: MediaQuery.of(context).size.width,
                         height: 350,
-                        image: NetworkImage(data.thumbnail),
+                        image: const NetworkImage(
+                            "https://i.ytimg.com/vi/xCxyJbSi9eU/maxresdefault.jpg"),
                         fit: BoxFit.cover,
                       ),
                       Positioned(
@@ -44,19 +45,19 @@ class CategoryDetail extends StatelessWidget {
                               ])),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
+                              children: const [
                                 Text(
-                                  "${data.name} category",
-                                  style: const TextStyle(
+                                  "Promo & Offers",
+                                  style: TextStyle(
                                       fontSize: 26,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white),
                                 ),
-                                const Center(
+                                Center(
                                   child: SizedBox(
-                                    width: 230,
+                                    width: double.infinity,
                                     child: Text(
-                                        "Buy and sell  product with the Number one online Mall",
+                                        "Buy our product in a friday vibe with a best discount, value your weekend with wasafi Mall",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -91,7 +92,7 @@ class CategoryDetail extends StatelessWidget {
                         ),
                       )
                     ])),
-                    productData.searchedProductList.isEmpty
+                    data.isEmpty
                         ? SliverToBoxAdapter(
                             child: Container(
                               margin: const EdgeInsets.only(top: 100),
@@ -100,7 +101,7 @@ class CategoryDetail extends StatelessWidget {
                                 child: Column(children: const [
                                   Bold(
                                       text:
-                                          "There no products in this category!",
+                                          "There no offers/promo in this now!",
                                       size: 14),
                                 ]),
                               ),
@@ -110,12 +111,8 @@ class CategoryDetail extends StatelessWidget {
                             delegate: SliverChildBuilderDelegate(
                                 (BuildContext context, int productIndex) {
                               return ProductCard(
-                                  isFlash: 0,
-                                  data: productData
-                                      .searchedProductList[productIndex]);
-                            },
-                                childCount:
-                                    productData.searchedProductList.length),
+                                  isFlash: 0, data: data[productIndex]);
+                            }, childCount: data.length),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,

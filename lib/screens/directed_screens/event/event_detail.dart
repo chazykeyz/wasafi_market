@@ -138,8 +138,11 @@ class _EventDetailState extends State<EventDetail> {
                             vertical: 10, horizontal: 20),
                         height: 50,
                         decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10)),
+                            gradient: const LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                colors: [Colors.red, Colors.purple]),
+                            borderRadius: BorderRadius.circular(20)),
                         child: const Center(
                             child: Regular(
                                 text: "Buy Ticket - Tsh 1500/=",

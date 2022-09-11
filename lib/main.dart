@@ -7,6 +7,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:wasafi_market/controllers/auth.dart';
 import 'package:wasafi_market/controllers/product_category.dart';
 import 'package:wasafi_market/controllers/products.dart';
+import 'package:wasafi_market/controllers/stories.dart';
 import 'package:wasafi_market/controllers/user.dart';
 import 'package:wasafi_market/screens/navigation_screens/account.dart';
 import 'package:wasafi_market/screens/navigation_screens/cart.dart';
@@ -38,7 +39,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Parent(
+      home:
+          //  const Start()
+
+          const Parent(
         isFromDetail: false,
         number: 0,
       ),
@@ -71,6 +75,7 @@ class _ParentState extends State<Parent> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Get.find<StoriesController>().getStories();
       if (widget.isFromDetail == true) {
         navigationChange(widget.number);
       }
@@ -105,7 +110,7 @@ class _ParentState extends State<Parent> {
             child: Container(
               decoration: const BoxDecoration(
                   border:
-                      Border(top: BorderSide(color: Colors.white12, width: 1))),
+                      Border(top: BorderSide(color: Colors.white30, width: 1))),
               child: ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -113,12 +118,11 @@ class _ParentState extends State<Parent> {
                       onTap: navigationChange,
                       currentIndex: selectedItem,
                       selectedItemColor: Colors.blue,
-                      unselectedItemColor:
-                          const Color.fromARGB(255, 169, 169, 169),
+                      unselectedItemColor: Colors.white70,
                       items: [
                         // the home navigation
                         BottomNavigationBarItem(
-                          backgroundColor: Colors.black.withOpacity(.6),
+                          backgroundColor: Colors.black.withOpacity(0.5),
                           icon: const Icon(
                             Ionicons.home_outline,
                             size: 25,
@@ -142,13 +146,13 @@ class _ParentState extends State<Parent> {
                           backgroundColor: Colors.black.withOpacity(.6),
                           icon: SizedBox(
                             width: 40,
-                            height: 20,
-                            child: Stack(children: [
+                            child: Stack(clipBehavior: Clip.none, children: [
                               Container(
-                                  margin: const EdgeInsets.only(top: 8),
+                                  margin: const EdgeInsets.only(top: 0),
                                   child: const Icon(CupertinoIcons.bag)),
                               Positioned(
                                   left: 15,
+                                  top: -8,
                                   child: Container(
                                     padding: const EdgeInsets.all(2),
                                     constraints: const BoxConstraints(

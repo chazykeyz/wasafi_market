@@ -7,13 +7,12 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:get/get.dart';
 import 'package:wasafi_market/controllers/products.dart';
 import 'package:wasafi_market/controllers/shop.dart';
-import 'package:wasafi_market/screens/directed_screens/product/category.dart';
 import 'package:wasafi_market/screens/directed_screens/user/search.dart';
 import 'package:wasafi_market/widgets/loads/main_loader.dart';
 import 'package:wasafi_market/widgets/product/product_card.dart';
 import 'package:wasafi_market/widgets/seller.dart';
+import 'package:wasafi_market/widgets/text/bold.dart';
 import 'package:wasafi_market/widgets/text/regular.dart';
-import 'package:wasafi_market/widgets/text_tile.dart';
 
 class Explore extends StatelessWidget {
   const Explore({Key? key}) : super(key: key);
@@ -152,10 +151,19 @@ class Explore extends StatelessWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const TextTile(
-                              title: "Trending Shops",
-                              more: CategoryDetail(),
-                              isGradient: false,
+                            ListTile(
+                              title: Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 8.0),
+                                    child: Icon(
+                                      CupertinoIcons.checkmark_seal_fill,
+                                      color: Colors.white38,
+                                    ),
+                                  ),
+                                  Bold(text: "Trending Shops", size: 15)
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 245,
@@ -203,10 +211,17 @@ class Explore extends StatelessWidget {
                               ? const SizedBox(
                                   height: 0,
                                 )
-                              : const TextTile(
-                                  title: "Trending Products",
-                                  more: CategoryDetail(),
-                                  isGradient: false,
+                              : Row(
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        CupertinoIcons.checkmark_seal_fill,
+                                        color: Colors.white38,
+                                      ),
+                                    ),
+                                    Bold(text: "Trending Products", size: 15)
+                                  ],
                                 ),
                           SizedBox(
                             height: products.isEmpty ? 0 : 230,

@@ -280,8 +280,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                                               widget.data.id)
                                                           .length ==
                                                       0
-                                                  ? CupertinoIcons.heart
-                                                  : CupertinoIcons.heart_solid,
+                                                  ? CupertinoIcons.bookmark
+                                                  : CupertinoIcons
+                                                      .bookmark_solid,
                                               color: Colors.white,
                                             )),
                                 )),

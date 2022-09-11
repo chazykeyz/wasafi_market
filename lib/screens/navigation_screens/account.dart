@@ -10,7 +10,7 @@ import 'package:wasafi_market/main.dart';
 import 'package:wasafi_market/models/auth/password.dart';
 import 'package:wasafi_market/models/shop/shops.dart';
 import 'package:wasafi_market/models/user/username.dart';
-import 'package:wasafi_market/screens/directed_screens/product/add_product.dart';
+import 'package:wasafi_market/screens/directed_screens/product/management.dart';
 import 'package:wasafi_market/screens/directed_screens/user/customers.dart';
 import 'package:wasafi_market/screens/directed_screens/user/favorite.dart';
 import 'package:wasafi_market/screens/directed_screens/order/order.dart';
